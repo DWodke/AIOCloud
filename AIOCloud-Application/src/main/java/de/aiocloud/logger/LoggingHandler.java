@@ -3,14 +3,14 @@ package de.aiocloud.logger;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class LoggingBuilder {
+public class LoggingHandler {
 
     private SimpleDateFormat dateformat;
 
     /**
      * This is the initial method of the 'LoggingBuilder' object.
      */
-    public LoggingBuilder() {
+    public LoggingHandler() {
         this.dateformat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     }
     /**
@@ -18,5 +18,13 @@ public class LoggingBuilder {
      */
     public void print(String message, LoggingType type) {
         System.out.println("[" + this.dateformat.format(new Date()).toString() + "] [" + type + "]: " + message);
+    }
+    /**
+     * Clear the system console.
+     */
+    public void clear() {
+    	for(int i = 0; i < 100; i++) {
+    		System.out.println(" ");
+    	}
     }
 }
