@@ -15,6 +15,10 @@ public class Dispatcher {
 	 * This is the initial method of the dispatcher.
 	 */
 	public static void startDispatcherComponent() {
+
+		if(FileManager.load()) {
+
+		}
 		AIOCloud.printHeader();
 		for(int i = 0; i < 5; i++) {
 			System.out.println(" ");
@@ -23,7 +27,6 @@ public class Dispatcher {
 		for(int i = 0; i < 2; i++) {
 			System.out.println(" ");
 		}
-		FileManager.load();
 		commandmanager = new CommandManager();
 		register();
 		startCommandReading();
@@ -56,5 +59,24 @@ public class Dispatcher {
 	 */
 	private static void register() {
 		
+	}
+	/**
+	 * Starts the setup of the dispatcher.
+	 */
+	public static void startSetup() {
+		String hostaddress;
+		AIOCloud.logginghandler.print("This is the setup of the dispatcher!", LoggingType.INFO);
+		AIOCloud.logginghandler.print("Please fill all fields.", LoggingType.INFO);
+		for(int i = 0; i < 2; i++) {
+			System.out.println(" ");
+		}
+		AIOCloud.logginghandler.print("What is the host-address of the system? (127.0.0.1)", LoggingType.INFO);
+		String line = null;
+		try {
+			line = AIOCloud.reader.readLine("   AIOCloud > ");
+			hostaddress = line;
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
 	}
 }
