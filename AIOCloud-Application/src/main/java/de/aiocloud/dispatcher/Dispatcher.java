@@ -65,6 +65,12 @@ public class Dispatcher {
 	 */
 	public static void startSetup() {
 		String hostaddress;
+		String firstworker;
+		String firstworkeraddress;
+		String firstproxygroup;
+		String firstgroup;
+		Integer firstproxygroupramm;
+		Integer firstgrupramm;
 		AIOCloud.logginghandler.print("This is the setup of the dispatcher!", LoggingType.INFO);
 		AIOCloud.logginghandler.print("Please fill all fields.", LoggingType.INFO);
 		for(int i = 0; i < 2; i++) {
@@ -75,6 +81,22 @@ public class Dispatcher {
 		try {
 			line = AIOCloud.reader.readLine("   AIOCloud > ");
 			hostaddress = line;
+			AIOCloud.logginghandler.print("What is the name of the first worker? (Worker-1)", LoggingType.INFO);
+			line = AIOCloud.reader.readLine("   AIOCloud > ");
+			firstworker = line;
+			AIOCloud.logginghandler.print("What is the address from the first worker? (127.0.0.1)", LoggingType.INFO);
+			line = AIOCloud.reader.readLine("   AIOCloud > ");
+			firstworkeraddress = line;
+			AIOCloud.logginghandler.print("What is the name of the first proxy-group? (Proxy)", LoggingType.INFO);
+			line = AIOCloud.reader.readLine("   AIOCloud > ");
+			firstproxygroup = line;
+			AIOCloud.logginghandler.print("What is the name of the first proxy-group? (Proxy)", LoggingType.INFO);
+			line = AIOCloud.reader.readLine("   AIOCloud > ");
+
+			firstproxygroup = line;
+			AIOCloud.logginghandler.print("What is the name of the first group? (Lobby)", LoggingType.INFO);
+			line = AIOCloud.reader.readLine("   AIOCloud > ");
+			firstgroup = line;
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
