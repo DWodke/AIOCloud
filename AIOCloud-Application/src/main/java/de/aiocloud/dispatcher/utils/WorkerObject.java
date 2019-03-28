@@ -18,7 +18,7 @@ public class WorkerObject {
     private String hostaddress;
     private Integer port;
     private String workername;
-    private Integer workerid;
+    private String workerid;
     private ServerSocket serversocket;
     private Socket chatsocket;
     private Gson gson;
@@ -31,7 +31,7 @@ public class WorkerObject {
      * @param name is the name of the worker.
      * @param id is the id of the worker.
      */
-    public WorkerObject(String host, Integer port, String name, Integer id) {
+    public WorkerObject(String host, Integer port, String name, String id) {
         this.hostaddress = host;
         this.port = port;
         this.workername = name;
@@ -46,7 +46,6 @@ public class WorkerObject {
     public void open() {
         try {
             this.serversocket = new ServerSocket(this.port);
-            AIOCloud.logginghandler.print("Channel for worker with id '" + this.workerid + "' and the port '" + this.port + "' open successfully...", LoggingType.INFO);
             connect();
         } catch (Exception e) {
             AIOCloud.logginghandler.print("Channel for worker with id '" + this.workerid + "' and the port '" + this.port + "' can't open...", LoggingType.ERROR);

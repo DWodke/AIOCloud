@@ -42,3 +42,10 @@ AIOCloud-Application/.idea/artifacts/AIOCloud.xml
 AIOCloud-Application/src/main/resources/META-INF/MANIFEST.MF
 AIOCloud-Application/target/classes/META-INF/MANIFEST.MF
 AIOCloud-Application/.idea/uiDesigner.xml
+AIOCloud-Application/.idea/artifacts/AIOCloud_jar.xml
+AIOCloud-Application/.idea/artifacts/AIOCloud_jar.xml
+AIOCloud-Application/.idea/artifacts/AIOCloud_jar.xml
+AIOCloud-Application/src/main/resourcess/META-INF/MANIFEST.MF
+AIOCloud-Application/target/classes/META-INF/aioapplication.kotlin_module
+AIOCloud-Application/src/main/resourcess/META-INF/MANIFEST.MF
+*.MF

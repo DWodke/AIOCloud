@@ -1,23 +1,31 @@
 package de.aiocloud.dispatcher;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 import de.aiocloud.AIOCloud;
 import de.aiocloud.dispatcher.objects.CommandManager;
+import de.aiocloud.dispatcher.objects.DispatcherSetup;
+import de.aiocloud.dispatcher.objects.PortManager;
 import de.aiocloud.dispatcher.utils.FileManager;
+import de.aiocloud.dispatcher.utils.WorkerObject;
 import de.aiocloud.logger.LoggingType;
 
 public class Dispatcher {
 	
 	public static CommandManager commandmanager;
+	public static PortManager portmanager;
+	public static HashMap<String, WorkerObject> availableworker;
 	
 	/**
 	 * This is the initial method of the dispatcher.
 	 */
 	public static void startDispatcherComponent() {
-
+		portmanager = new PortManager();
 		if(FileManager.load()) {
-
+			new DispatcherSetup();
+		} else {
+			FileManager.loadDispatcherConfig();
 		}
 		AIOCloud.printHeader();
 		for(int i = 0; i < 5; i++) {
@@ -28,31 +36,33 @@ public class Dispatcher {
 			System.out.println(" ");
 		}
 		commandmanager = new CommandManager();
+		availableworker = new HashMap<String, WorkerObject>();
 		register();
+		FileManager.registerAllWorker();
 		startCommandReading();
 	}
 	/**
 	 * This method start to reading the commandline.
 	 */
 	private static void startCommandReading() {
-		do {
-			String commandline = null;
-			try {
-				commandline = AIOCloud.reader.readLine("   AIOCloud > ");
-				if(commandmanager.getMap().containsKey(commandline.split(" ")[0])) {
-					for(String key : commandmanager.getMap().keySet()) {
-						if(commandline.toLowerCase().startsWith(key.toLowerCase())) {
-							commandmanager.getMap().get(key).execute(commandline.split(" "));
-							break;
+				do {
+					String commandline = null;
+					try {
+						commandline = AIOCloud.reader.readLine("   AIOCloud > ");
+						if(commandmanager.getMap().containsKey(commandline.split(" ")[0])) {
+							for(String key : commandmanager.getMap().keySet()) {
+								if(commandline.toLowerCase().startsWith(key.toLowerCase())) {
+									commandmanager.getMap().get(key).execute(commandline.split(" "));
+									continue;
+								}
+							}
+						} else {
+							AIOCloud.logginghandler.print("Use 'help' for more informations.", LoggingType.INFO);
 						}
+					} catch (IOException e1) {
+						e1.printStackTrace();
 					}
-				} else {
-					AIOCloud.logginghandler.print("Use 'help' for more informations.", LoggingType.INFO);
-				}
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
-		} while(true);
+				} while(true);
 	}
 	/**
 	 * This method registered all commands and listeners.

@@ -1,5 +1,7 @@
 package de.aiocloud.logger;
 
+import de.aiocloud.AIOCloud;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -17,14 +19,22 @@ public class LoggingHandler {
      * Prints the @param(message) and the @param(type) in the console.
      */
     public void print(String message, LoggingType type) {
-        System.out.println("[" + this.dateformat.format(new Date()).toString() + "] [" + type + "]: " + message);
+        try {
+            AIOCloud.reader.println("[" + this.dateformat.format(new Date()).toString() + "] [" + type + "]: " + message);
+            AIOCloud.reader.flush();
+        } catch (Exception e) {
+        }
     }
     /**
      * Clear the system console.
      */
     public void clear() {
-    	for(int i = 0; i < 100; i++) {
-    		System.out.println(" ");
-    	}
+        try {
+            for(int i = 0; i < 100; i++) {
+                AIOCloud.reader.println(" ");
+                AIOCloud.reader.flush();
+            }
+        } catch (Exception e) {
+        }
     }
 }
