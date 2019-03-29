@@ -71,10 +71,24 @@ public class AIOCloud {
             Integer componentnumber = Integer.parseInt(component);
             if(componentnumber == 1) {
             	logginghandler.clear();
-            	Dispatcher.startDispatcherComponent();
+            	reader.setPrompt("");
+                try {
+                    reader.resetPromptLine("", "", 0);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                Dispatcher.startDispatcherComponent();
+                return;
             } else if(componentnumber == 2) {
             	logginghandler.clear();
+                reader.setPrompt("");
+                try {
+                    reader.resetPromptLine("", "", 0);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             	Worker.startWorkerComponent();
+                return;
             } else {
             	logginghandler.print("Pls type a number between 1 and 2 in the console.", LoggingType.INFO);
                 quest();

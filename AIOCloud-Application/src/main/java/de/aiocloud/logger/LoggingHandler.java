@@ -21,6 +21,7 @@ public class LoggingHandler {
     public void print(String message, LoggingType type) {
         try {
             AIOCloud.reader.println("[" + this.dateformat.format(new Date()).toString() + "] [" + type + "]: " + message);
+            AIOCloud.reader.drawLine();
             AIOCloud.reader.flush();
         } catch (Exception e) {
         }

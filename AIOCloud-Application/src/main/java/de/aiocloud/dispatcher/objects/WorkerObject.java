@@ -1,10 +1,13 @@
-package de.aiocloud.dispatcher.utils;
+package de.aiocloud.dispatcher.objects;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import de.aiocloud.AIOCloud;
+import de.aiocloud.dispatcher.utils.FileManager;
+import de.aiocloud.library.connector.Packet;
+import de.aiocloud.library.security.SecurityManager;
 import de.aiocloud.logger.LoggingType;
 
 import java.io.BufferedReader;
@@ -23,6 +26,7 @@ public class WorkerObject {
     private Socket chatsocket;
     private Gson gson;
     private JsonParser parser;
+    private Integer totalram;
 
     /**
      * This is the initial method of the 'WorkerObject' object.
@@ -36,8 +40,9 @@ public class WorkerObject {
         this.port = port;
         this.workername = name;
         this.workerid = id;
-        this.gson = new GsonBuilder().setPrettyPrinting().create();
+        this.gson = new GsonBuilder().create();
         this.parser = new JsonParser();
+        this.totalram = 0;
         this.open();
     }
     /**
@@ -61,7 +66,6 @@ public class WorkerObject {
                     Socket socket = null;
                     while((socket = serversocket.accept()) != null) {
                         chatsocket = socket;
-                        AIOCloud.logginghandler.print("The worker with id '" + workerid + "' has connected successfully.", LoggingType.INFO);
                         readChannel();
                         break;
                     }
@@ -94,21 +98,37 @@ public class WorkerObject {
                             String key = json.get("key").getAsString();
                             if(key != null) {
                                 if(key.equalsIgnoreCase("registration")) {
-
+                                    if(SecurityManager.checkPassword(workerid, json.get("verifyId").getAsString())) {
+                                        totalram = json.get("totalRam").getAsInt();
+                                        AIOCloud.logginghandler.print("The worker '" + workername + "' has verified with key '" + json.get("verifyId").getAsString() + "'.", LoggingType.INFO);
+                                        AIOCloud.logginghandler.print("He has " + totalram + "mb memory available.", LoggingType.INFO);
+                                        JsonObject jsonObject = new JsonObject();
+                                        jsonObject.addProperty("key", "registration");
+                                        jsonObject.addProperty("minecraftVersion", FileManager.config.getMinecraftVersion());
+                                        jsonObject.addProperty("serverVersion", FileManager.config.getServerVersion());
+                                        jsonObject.addProperty("proxyVersion", FileManager.config.getProxyVersion());
+                                        new Packet(jsonObject).send(chatsocket);
+                                    } else {
+                                        AIOCloud.logginghandler.print("Connection to '" + workername + "' refused.", LoggingType.WARNING);
+                                        AIOCloud.logginghandler.print("Reason: verify-key does not equals!", LoggingType.WARNING);
+                                        chatsocket.close();
+                                        connect();
+                                        return;
+                                    }
                                 }
                             }
                         } else {
                             if(reader.read() == -1) {
-                                AIOCloud.logginghandler.print("The worker with the id '" + workerid + "' has left the channel.", LoggingType.WARNING);
-                                AIOCloud.logginghandler.print("Trying to connect to worker with id '" + workerid + "'.", LoggingType.INFO);
+                                AIOCloud.logginghandler.print("The worker  '" + workername + "' has left the channel.", LoggingType.WARNING);
+                                AIOCloud.logginghandler.print("Trying to connect to worker '" + workername + "'.", LoggingType.INFO);
                                 connect();
                                 return;
                             }
                         }
                     }
                 } catch (IOException e) {
-                    AIOCloud.logginghandler.print("The worker with the id '" + workerid + "' has left the channel.", LoggingType.WARNING);
-                    AIOCloud.logginghandler.print("Trying to connect to worker with id '" + workerid + "'.", LoggingType.INFO);
+                    AIOCloud.logginghandler.print("The worker  '" + workername + "' has left the channel.", LoggingType.WARNING);
+                    AIOCloud.logginghandler.print("Trying to connect to worker '" + workername + "'.", LoggingType.INFO);
                     connect();
                     return;
                 }

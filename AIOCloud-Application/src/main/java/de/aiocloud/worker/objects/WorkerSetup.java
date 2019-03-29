@@ -2,6 +2,7 @@ package de.aiocloud.worker.objects;
 
 import de.aiocloud.AIOCloud;
 import de.aiocloud.logger.LoggingType;
+import de.aiocloud.worker.utils.FileManager;
 
 import java.io.IOException;
 
@@ -76,7 +77,8 @@ public class WorkerSetup {
                     try {
                         this.totalram = Integer.parseInt(line);
                         this.taskid = this.taskid +1;
-                        this.nextQuestion();
+                        FileManager.createWorkerConfig(this.workername, this.hostaddress, this.dispatcheraddress, this.dispatcherport, this.workerid, this.totalram);
+                        FileManager.loadWorkerConfig();
                         break;
                     } catch (NumberFormatException e) {
                         AIOCloud.logginghandler.print("Invalid answer. Please make it again.", LoggingType.WARNING);

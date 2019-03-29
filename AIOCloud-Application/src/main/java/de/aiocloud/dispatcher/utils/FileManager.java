@@ -8,6 +8,7 @@ import com.google.gson.stream.JsonReader;
 import de.aiocloud.AIOCloud;
 import de.aiocloud.dispatcher.Dispatcher;
 import de.aiocloud.dispatcher.objects.Config;
+import de.aiocloud.dispatcher.objects.WorkerObject;
 import de.aiocloud.logger.LoggingType;
 
 import java.io.*;

@@ -1,6 +1,7 @@
 package de.aiocloud.worker.utils;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
@@ -27,6 +28,8 @@ public class FileManager {
      * This is the initial method of the class.
      */
     public static Boolean load() {
+        gson = new GsonBuilder().setPrettyPrinting().create();
+        parser = new JsonParser();
         Boolean returnBoolean = false;
         try {
             maindir = new File("./worker");
