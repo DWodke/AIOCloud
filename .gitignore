@@ -49,3 +49,4 @@ AIOCloud-Application/src/main/resourcess/META-INF/MANIFEST.MF
 AIOCloud-Application/target/classes/META-INF/aioapplication.kotlin_module
 AIOCloud-Application/src/main/resourcess/META-INF/MANIFEST.MF
 *.MF
+AIOCloud-Application/src/main/java/de/aiocloud/worker/objects/DispatcherObject.java___jb_old___

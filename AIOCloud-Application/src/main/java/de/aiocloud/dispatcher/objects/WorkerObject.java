@@ -15,6 +15,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 
 public class WorkerObject {
 
@@ -98,7 +100,7 @@ public class WorkerObject {
                             String key = json.get("key").getAsString();
                             if(key != null) {
                                 if(key.equalsIgnoreCase("registration")) {
-                                    if(SecurityManager.checkPassword(workerid, json.get("verifyId").getAsString())) {
+                                    if(SecurityManager.checkHash(workerid, json.get("verifyId").getAsString())) {
                                         totalram = json.get("totalRam").getAsInt();
                                         AIOCloud.logginghandler.print("The worker '" + workername + "' has verified with key '" + json.get("verifyId").getAsString() + "'.", LoggingType.INFO);
                                         AIOCloud.logginghandler.print("He has " + totalram + "mb memory available.", LoggingType.INFO);
@@ -130,7 +132,14 @@ public class WorkerObject {
                     AIOCloud.logginghandler.print("The worker  '" + workername + "' has left the channel.", LoggingType.WARNING);
                     AIOCloud.logginghandler.print("Trying to connect to worker '" + workername + "'.", LoggingType.INFO);
                     connect();
-                    return;
+                } catch (NoSuchAlgorithmException e) {
+                    AIOCloud.logginghandler.print("The worker  '" + workername + "' has left the channel.", LoggingType.WARNING);
+                    AIOCloud.logginghandler.print("Trying to connect to worker '" + workername + "'.", LoggingType.INFO);
+                    connect();
+                } catch (InvalidKeySpecException e) {
+                    AIOCloud.logginghandler.print("The worker  '" + workername + "' has left the channel.", LoggingType.WARNING);
+                    AIOCloud.logginghandler.print("Trying to connect to worker '" + workername + "'.", LoggingType.INFO);
+                    connect();
                 }
             }
         }).start();

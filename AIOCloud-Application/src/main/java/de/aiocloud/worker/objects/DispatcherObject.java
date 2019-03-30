@@ -51,7 +51,7 @@ public class DispatcherObject {
             AIOCloud.logginghandler.print("Connection to dispatcher is successfully open!", LoggingType.INFO);
             this.tries = 0;
             this.readChannel();
-            String hashedpw = SecurityManager.hashPassword(FileManager.config.getWorkerId());
+            String hashedpw = SecurityManager.generateHash(FileManager.config.getWorkerId());
             JsonObject json = new JsonObject();
             json.addProperty("key", "registration");
             json.addProperty("verifyId", hashedpw);
