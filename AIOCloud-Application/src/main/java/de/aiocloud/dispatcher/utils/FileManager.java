@@ -1,9 +1,6 @@
 package de.aiocloud.dispatcher.utils;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.google.gson.*;
 import com.google.gson.stream.JsonReader;
 import de.aiocloud.AIOCloud;
 import de.aiocloud.dispatcher.Dispatcher;
@@ -115,7 +112,7 @@ public class FileManager {
 				FileWriter writer = new FileWriter(workerfile);
 				JsonObject json = new JsonObject();
 				json.addProperty("name", name);
-				json.addProperty("id", UUID.randomUUID().toString());
+				json.addProperty("authToken", UUID.randomUUID().toString());
 				Integer port = Dispatcher.portmanager.getNextFreeWorkerPort();
 				json.addProperty("port", port);
 				Dispatcher.portmanager.addWorkerPort(port);
@@ -153,13 +150,18 @@ public class FileManager {
 				json.addProperty("name", name);
 				json.addProperty("worker", worker);
 				Integer port = Dispatcher.portmanager.getNextFreeProxyPort();
-				json.addProperty("port", port);
+				json.addProperty("dispatcherPort", port);
 				Dispatcher.portmanager.addProxyPort(port);
 				json.addProperty("startPort", 25565);
 				json.addProperty("save_logs", true);
 				json.addProperty("memory", memory);
 				json.addProperty("minOnline", online);
 				json.addProperty("maxOnline", maxonline);
+				json.addProperty("dynamic", dynamic);
+				JsonArray motdarray = new JsonArray();
+				motdarray.add("&6AIOCloud - Application &7| &ccreator: Dominik Wodke");
+				motdarray.add("&6Version: ");
+				json.add("motd", );
 				json.addProperty("dynamic", dynamic);
 				SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 				json.addProperty("createdAt", format.format(new Date()).toString());
@@ -186,9 +188,9 @@ public class FileManager {
 					String name = file.getName().replaceAll(".json", "");
 					JsonReader reader = new JsonReader(new FileReader(file));
 					JsonObject json = gson.fromJson(reader, JsonObject.class);
-					Dispatcher.availableworker.put(name, new WorkerObject(config.getHostname(), json.get("port").getAsInt(), name, json.get("id").getAsString()));
+					Dispatcher.availableworker.put(name, new WorkerObject(config.getHostname(), json.get("port").getAsInt(), name, json.get("authToken").getAsString()));
 					Dispatcher.portmanager.addWorkerPort(json.get("port").getAsInt());
-					AIOCloud.logginghandler.print("Worker loaded [Name: " + name + ", ID: " + json.get("id").getAsString() + ", Port: " + json.get("port").getAsInt() + "]", LoggingType.INFO);
+					AIOCloud.logginghandler.print("Worker loaded [name: " + name + ", authToken: " + json.get("authToken").getAsString() + ", port: " + json.get("port").getAsInt() + "]", LoggingType.INFO);
 				}
 			}
 		} catch (Exception e) {

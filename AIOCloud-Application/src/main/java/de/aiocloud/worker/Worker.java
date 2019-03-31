@@ -3,6 +3,7 @@ package de.aiocloud.worker;
 import de.aiocloud.AIOCloud;
 import de.aiocloud.logger.LoggingType;
 import de.aiocloud.worker.objects.DispatcherObject;
+import de.aiocloud.worker.objects.ServerVersion;
 import de.aiocloud.worker.objects.WorkerSetup;
 import de.aiocloud.worker.utils.FileManager;
 

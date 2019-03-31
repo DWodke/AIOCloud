@@ -32,25 +32,25 @@ public class WorkerSetup {
         String line = null;
         try {
             switch(this.taskid) {
-                case 0 : AIOCloud.logginghandler.print("Please provide the name of this worker. (Worker-1)", LoggingType.INFO); line = AIOCloud.reader.readLine("   AIOCloud > ");
+                case 0 : AIOCloud.logginghandler.print("Please provide the name of this worker. (Worker-1)", LoggingType.INFO); line = AIOCloud.reader.readLine();
                     this.workername = line;
                     this.taskid = this.taskid +1;
                     this.nextQuestion();
                     break;
 
-                case 1 : AIOCloud.logginghandler.print("Please provide the host-address of the worker. (127.0.0.1)", LoggingType.INFO); line = AIOCloud.reader.readLine("   AIOCloud > ");
+                case 1 : AIOCloud.logginghandler.print("Please provide the host-address of the worker. (127.0.0.1)", LoggingType.INFO); line = AIOCloud.reader.readLine();
                     this.hostaddress = line;
                     this.taskid = this.taskid +1;
                     this.nextQuestion();
                     break;
 
-                case 2 : AIOCloud.logginghandler.print("Please provide the address from the dispatcher. (127.0.0.1)", LoggingType.INFO); line = AIOCloud.reader.readLine("   AIOCloud > ");
+                case 2 : AIOCloud.logginghandler.print("Please provide the address from the dispatcher. (127.0.0.1)", LoggingType.INFO); line = AIOCloud.reader.readLine();
                     this.dispatcheraddress = line;
                     this.taskid = this.taskid +1;
                     this.nextQuestion();
                     break;
 
-                case 3 : AIOCloud.logginghandler.print("Please provide the port of the dispatcher. (12000)", LoggingType.INFO); line = AIOCloud.reader.readLine("   AIOCloud > ");
+                case 3 : AIOCloud.logginghandler.print("Please provide the port of the dispatcher. (12000)", LoggingType.INFO); line = AIOCloud.reader.readLine();
                 try {
                     this.dispatcherport = Integer.parseInt(line);
                     this.taskid = this.taskid +1;
@@ -67,13 +67,13 @@ public class WorkerSetup {
                     break;
                 }
 
-                case 4 : AIOCloud.logginghandler.print("Please provide the worker-id from the dispatcher screen. (UUID)", LoggingType.INFO); line = AIOCloud.reader.readLine("   AIOCloud > ");
+                case 4 : AIOCloud.logginghandler.print("Please provide the worker-id from the dispatcher screen. (UUID)", LoggingType.INFO); line = AIOCloud.reader.readLine();
                     this.workerid = line;
                     this.taskid = this.taskid +1;
                     this.nextQuestion();
                     break;
 
-                case 5 : AIOCloud.logginghandler.print("Please provide the total ram of this worker. (1024)", LoggingType.INFO); line = AIOCloud.reader.readLine("   AIOCloud > ");
+                case 5 : AIOCloud.logginghandler.print("Please provide the total ram of this worker. (1024)", LoggingType.INFO); line = AIOCloud.reader.readLine();
                     try {
                         this.totalram = Integer.parseInt(line);
                         this.taskid = this.taskid +1;

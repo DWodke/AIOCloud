@@ -63,7 +63,7 @@ public class AIOCloud {
     public static void quest() {
         String component = null;
 		try {
-			component = reader.readLine("   AIOCloud > ");
+			component = reader.readLine();
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
@@ -71,22 +71,10 @@ public class AIOCloud {
             Integer componentnumber = Integer.parseInt(component);
             if(componentnumber == 1) {
             	logginghandler.clear();
-            	reader.setPrompt("");
-                try {
-                    reader.resetPromptLine("", "", 0);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
                 Dispatcher.startDispatcherComponent();
                 return;
             } else if(componentnumber == 2) {
             	logginghandler.clear();
-                reader.setPrompt("");
-                try {
-                    reader.resetPromptLine("", "", 0);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
             	Worker.startWorkerComponent();
                 return;
             } else {

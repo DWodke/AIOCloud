@@ -23,6 +23,7 @@ public class DispatcherObject {
     private Integer tries;
     private Gson gson;
     private JsonParser parser;
+    private ServerVersion serverversion;
 
     /**
      * This is the initial method of the 'DispatcherObject'.
@@ -54,7 +55,7 @@ public class DispatcherObject {
             String hashedpw = SecurityManager.generateHash(FileManager.config.getWorkerId());
             JsonObject json = new JsonObject();
             json.addProperty("key", "registration");
-            json.addProperty("verifyId", hashedpw);
+            json.addProperty("authToken", hashedpw);
             json.addProperty("name", FileManager.config.getWorkerName());
             json.addProperty("totalRam", FileManager.config.getTotalRam());
             new Packet(json).send(this.socket);
@@ -84,7 +85,7 @@ public class DispatcherObject {
                         String key = json.get("key").getAsString();
                         if(key != null) {
                             if(key.equalsIgnoreCase("registration")) {
-
+                                serverversion = new ServerVersion(json.get("serverVersion").getAsString(), json.get("minecraftVersion").getAsString(), json.get("proxyVersion").getAsString());
                             }
                         }
                     }
@@ -95,6 +96,7 @@ public class DispatcherObject {
                         Thread.sleep(1000);
                     } catch (Exception e1) {
                     }
+                    connect();
                 }
             }
         }).start();

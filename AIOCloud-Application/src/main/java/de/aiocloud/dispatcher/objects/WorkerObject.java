@@ -100,10 +100,10 @@ public class WorkerObject {
                             String key = json.get("key").getAsString();
                             if(key != null) {
                                 if(key.equalsIgnoreCase("registration")) {
-                                    if(SecurityManager.checkHash(workerid, json.get("verifyId").getAsString())) {
+                                    if(SecurityManager.checkHash(workerid, json.get("authToken").getAsString())) {
                                         totalram = json.get("totalRam").getAsInt();
-                                        AIOCloud.logginghandler.print("The worker '" + workername + "' has verified with key '" + json.get("verifyId").getAsString() + "'.", LoggingType.INFO);
-                                        AIOCloud.logginghandler.print("He has " + totalram + "mb memory available.", LoggingType.INFO);
+                                        AIOCloud.logginghandler.print("The worker '" + workername + "' has verified successfully.", LoggingType.INFO);
+                                        AIOCloud.logginghandler.print("He has " + totalram + " megabyte of memory available.", LoggingType.INFO);
                                         JsonObject jsonObject = new JsonObject();
                                         jsonObject.addProperty("key", "registration");
                                         jsonObject.addProperty("minecraftVersion", FileManager.config.getMinecraftVersion());
@@ -121,7 +121,7 @@ public class WorkerObject {
                             }
                         } else {
                             if(reader.read() == -1) {
-                                AIOCloud.logginghandler.print("The worker  '" + workername + "' has left the channel.", LoggingType.WARNING);
+                                AIOCloud.logginghandler.print("The worker '" + workername + "' has left the channel.", LoggingType.WARNING);
                                 AIOCloud.logginghandler.print("Trying to connect to worker '" + workername + "'.", LoggingType.INFO);
                                 connect();
                                 return;
@@ -129,15 +129,15 @@ public class WorkerObject {
                         }
                     }
                 } catch (IOException e) {
-                    AIOCloud.logginghandler.print("The worker  '" + workername + "' has left the channel.", LoggingType.WARNING);
+                    AIOCloud.logginghandler.print("The worker '" + workername + "' has left the channel.", LoggingType.WARNING);
                     AIOCloud.logginghandler.print("Trying to connect to worker '" + workername + "'.", LoggingType.INFO);
                     connect();
                 } catch (NoSuchAlgorithmException e) {
-                    AIOCloud.logginghandler.print("The worker  '" + workername + "' has left the channel.", LoggingType.WARNING);
+                    AIOCloud.logginghandler.print("The worker '" + workername + "' has left the channel.", LoggingType.WARNING);
                     AIOCloud.logginghandler.print("Trying to connect to worker '" + workername + "'.", LoggingType.INFO);
                     connect();
                 } catch (InvalidKeySpecException e) {
-                    AIOCloud.logginghandler.print("The worker  '" + workername + "' has left the channel.", LoggingType.WARNING);
+                    AIOCloud.logginghandler.print("The worker '" + workername + "' has left the channel.", LoggingType.WARNING);
                     AIOCloud.logginghandler.print("Trying to connect to worker '" + workername + "'.", LoggingType.INFO);
                     connect();
                 }

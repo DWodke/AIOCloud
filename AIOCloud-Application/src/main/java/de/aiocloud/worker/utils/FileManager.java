@@ -49,6 +49,15 @@ public class FileManager {
             filesdir = new File("./worker/files");
             if(!filesdir.exists()) {
                 filesdir.mkdir();
+            } else {
+                File proxyjar = new File("./worker/files/proxy.jar");
+                if(proxyjar.exists()) {
+                    proxyjar.delete();
+                }
+                File serverjar = new File("./worker/files/server.jar");
+                if(serverjar.exists()) {
+                    serverjar.delete();
+                }
             }
             templatedir = new File("./worker/templates");
             if(!templatedir.exists()) {
@@ -91,6 +100,24 @@ public class FileManager {
             reader.close();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+    /**
+     * This method deletes directories
+     * @param file
+     * @throws IOException
+     */
+    public static void deleteDir(File file) throws IOException {
+        if (file.isDirectory()) {
+            File[] entries = file.listFiles();
+            if (entries != null) {
+                for (File entry : entries) {
+                    deleteDir(entry);
+                }
+            }
+        }
+        if (!file.delete()) {
+            throw new IOException("Failed to delete " + file);
         }
     }
 }
