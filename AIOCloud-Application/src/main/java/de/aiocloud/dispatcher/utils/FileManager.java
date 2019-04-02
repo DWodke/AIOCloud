@@ -159,12 +159,12 @@ public class FileManager {
 				json.addProperty("maxOnline", maxonline);
 				json.addProperty("dynamic", dynamic);
 				JsonArray motdarray = new JsonArray();
-				motdarray.add("&6AIOCloud - Application &7| &ccreator: Dominik Wodke");
-				motdarray.add("&6Version: ");
-				json.add("motd", );
+				motdarray.add("&6AIOCloud - Application &7| &cfree to use for all.");
+				motdarray.add("&6Version: &c" + AIOCloud.versionhandler.getCurrentVersion());
+				json.add("motd", motdarray);
 				json.addProperty("dynamic", dynamic);
 				SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-				json.addProperty("createdAt", format.format(new Date()).toString());
+				json.addProperty("createdAt", format.format(new Date()));
 				writer.write(gson.toJson(json));
 				writer.flush();
 				writer.close();
@@ -182,7 +182,11 @@ public class FileManager {
 	 */
 	public static void registerAllWorker() {
 		try {
-			AIOCloud.logginghandler.print("Load all worker...", LoggingType.INFO);
+			AIOCloud.logginghandler.print("Load all worker:", LoggingType.INFO);
+			if(workerdir.listFiles() == null) {
+				AIOCloud.logginghandler.print("No Worker available....", LoggingType.WARNING);
+				return;
+			}
 			for(File file : workerdir.listFiles()) {
 				if(file.getName().endsWith("json")) {
 					String name = file.getName().replaceAll(".json", "");

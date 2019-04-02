@@ -2,6 +2,7 @@ package de.aiocloud;
 
 import java.io.IOException;
 
+import de.aiocloud.library.versioneering.VersionHandler;
 import org.fusesource.jansi.AnsiConsole;
 
 import de.aiocloud.dispatcher.Dispatcher;
@@ -15,6 +16,7 @@ public class AIOCloud {
     // Declare variables
     public static LoggingHandler logginghandler;
     public static ConsoleReader reader;
+    public static VersionHandler versionhandler;
 
     /**
      * This method create a new instance of AIOCloud-Application.
@@ -22,6 +24,7 @@ public class AIOCloud {
      * @param args is for the start-options from the system.
      */
     public static void main(String[] args) {
+        versionhandler = new VersionHandler();
         printHeader();
         for(int i = 0; i < 5; i++) {
             System.out.println(" ");
