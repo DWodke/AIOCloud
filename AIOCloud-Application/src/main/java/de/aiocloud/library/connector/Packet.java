@@ -4,6 +4,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import de.aiocloud.AIOCloud;
+import de.aiocloud.logger.LoggingType;
 
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -34,14 +36,18 @@ public class Packet {
         if(this.socket == null) {
             this.socket = socket;
         }
-        try {
-            OutputStream out = socket.getOutputStream();
-            PrintWriter writer = new PrintWriter(new OutputStreamWriter(out, "UTF-8"), true);
-            writer.write(gson.toJson(this.json) + "\n");
-            writer.flush();
-            out.flush();
-        } catch (Exception e) {
-            e.printStackTrace();
+        if(socket.isConnected() && socket != null) {
+            try {
+                OutputStream out = socket.getOutputStream();
+                PrintWriter writer = new PrintWriter(new OutputStreamWriter(out, "UTF-8"), true);
+                writer.write(gson.toJson(this.json) + "\n");
+                writer.flush();
+                out.flush();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            AIOCloud.logginghandler.print("ERROR while send packet...", LoggingType.ERROR);
         }
     }
 }

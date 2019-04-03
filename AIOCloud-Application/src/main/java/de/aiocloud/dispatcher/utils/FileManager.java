@@ -74,6 +74,7 @@ public class FileManager {
 			json.addProperty("defaultSeparator", "-");
 			json.addProperty("hostAddress", host);
 			json.addProperty("webPort", "8080");
+			json.addProperty("proxyConnectionStartPort", 13000);
 			json.addProperty("minecraftVersion", minecraftversion);
 			json.addProperty("serverVersion", serverversion);
 			json.addProperty("proxyVersion", proxyversion);
@@ -149,15 +150,13 @@ public class FileManager {
 				JsonObject json = new JsonObject();
 				json.addProperty("name", name);
 				json.addProperty("worker", worker);
-				Integer port = Dispatcher.portmanager.getNextFreeProxyPort();
-				json.addProperty("dispatcherPort", port);
-				Dispatcher.portmanager.addProxyPort(port);
 				json.addProperty("startPort", 25565);
 				json.addProperty("save_logs", true);
 				json.addProperty("memory", memory);
 				json.addProperty("minOnline", online);
 				json.addProperty("maxOnline", maxonline);
 				json.addProperty("dynamic", dynamic);
+				json.addProperty("maintenance", true);
 				JsonArray motdarray = new JsonArray();
 				motdarray.add("&6AIOCloud - Application &7| &cfree to use for all.");
 				motdarray.add("&6Version: &c" + AIOCloud.versionhandler.getCurrentVersion());

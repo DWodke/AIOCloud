@@ -86,6 +86,8 @@ public class DispatcherObject {
                         if(key != null) {
                             if(key.equalsIgnoreCase("registration")) {
                                 serverversion = new ServerVersion(json.get("serverVersion").getAsString(), json.get("minecraftVersion").getAsString(), json.get("proxyVersion").getAsString());
+                            } else if(key.equalsIgnoreCase("startProxy")) {
+
                             }
                         }
                     }

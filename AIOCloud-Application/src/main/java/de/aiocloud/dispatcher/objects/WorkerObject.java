@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import de.aiocloud.AIOCloud;
+import de.aiocloud.dispatcher.Dispatcher;
 import de.aiocloud.dispatcher.utils.FileManager;
 import de.aiocloud.library.connector.Packet;
 import de.aiocloud.library.security.SecurityManager;
@@ -143,5 +144,38 @@ public class WorkerObject {
                 }
             }
         }).start();
+    }
+    /**
+     * This method shows you if the worker still has enough memory.
+     * @param memory
+     * @return
+     */
+    public Boolean hasWorkerEnoughMemory(Integer memory) {
+        Integer used = 0;
+        for(ProxyGroupObject group : Dispatcher.proxygroups.values()) {
+            if(group.getWorker() == this) {
+                for(ProxyObject proxy : group.getAvailableProxies().values()) {
+                    used = used + group.getMemory();
+                }
+            }
+        }
+        Integer max = this.totalram;
+        if(used >= max) {
+            return false;
+        } else if(used < max) {
+            if(used + memory > max) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+        return false;
+    }
+    /**
+     * GET the socket from the worker.
+     * @return
+     */
+    public Socket getChatSocket() {
+        return chatsocket;
     }
 }

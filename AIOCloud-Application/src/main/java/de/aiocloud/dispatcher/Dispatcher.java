@@ -4,11 +4,8 @@ import java.io.IOException;
 import java.util.HashMap;
 
 import de.aiocloud.AIOCloud;
-import de.aiocloud.dispatcher.objects.CommandManager;
-import de.aiocloud.dispatcher.objects.DispatcherSetup;
-import de.aiocloud.dispatcher.objects.PortManager;
+import de.aiocloud.dispatcher.objects.*;
 import de.aiocloud.dispatcher.utils.FileManager;
-import de.aiocloud.dispatcher.objects.WorkerObject;
 import de.aiocloud.logger.LoggingType;
 
 public class Dispatcher {
@@ -16,12 +13,14 @@ public class Dispatcher {
 	public static CommandManager commandmanager;
 	public static PortManager portmanager;
 	public static HashMap<String, WorkerObject> availableworker;
+	public static HashMap<String, ProxyGroupObject> proxygroups;
 	
 	/**
 	 * This is the initial method of the dispatcher.
 	 */
 	public static void startDispatcherComponent() {
 		portmanager = new PortManager();
+		proxygroups = new HashMap<String, ProxyGroupObject>();
 		if(FileManager.load()) {
 			new DispatcherSetup();
 		} else {

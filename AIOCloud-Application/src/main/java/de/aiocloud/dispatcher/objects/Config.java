@@ -12,6 +12,7 @@ public class Config {
     private String minecraftversion;
     private String serverversion;
     private String proxyversion;
+    private Integer proxyconnectionstartport;
 
     /**
      * This method is the initial method of the 'Config' object.
@@ -25,6 +26,7 @@ public class Config {
         minecraftversion = json.get("minecraftVersion").getAsString();
         serverversion = json.get("serverVersion").getAsString();
         proxyversion = json.get("proxyVersion").getAsString();
+        this.proxyconnectionstartport = json.get("proxyConnectionStartPort").getAsInt();
     }
     /**
      * The follow methods are GET methods.
@@ -47,5 +49,8 @@ public class Config {
     }
     public String getServerVersion() {
         return serverversion;
+    }
+    public Integer getProxyConnectionStartPort() {
+        return proxyconnectionstartport;
     }
 }
