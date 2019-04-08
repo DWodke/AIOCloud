@@ -75,6 +75,7 @@ public class ProxyGroupObject {
             json.addProperty("dispatcherPort",  connectionport);
             json.addProperty("port", port);
             json.addProperty("memory", this.memory);
+            json.addProperty("dynamic", this.dynamic);
             new Packet(json).send(this.worker.getChatSocket());
             new ProxyObject(this.name + FileManager.config.getDefaultSeperator() + id, FileManager.config.getHostname(), connectionport, port, this);
         } else {

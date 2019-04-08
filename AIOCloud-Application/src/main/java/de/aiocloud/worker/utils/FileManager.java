@@ -7,10 +7,7 @@ import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
 import de.aiocloud.worker.objects.Config;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 
 public class FileManager {
 
@@ -118,6 +115,28 @@ public class FileManager {
         }
         if (!file.delete()) {
             throw new IOException("Failed to delete " + file);
+        }
+    }
+    /**
+     * This method copy an file to a directory.
+     * @param source to copy.
+     * @param dest output.
+     * @throws IOException
+     */
+    public static void copyFile(File source, File dest) throws IOException {
+        InputStream is = null;
+        OutputStream os = null;
+        try {
+            is = new FileInputStream(source);
+            os = new FileOutputStream(dest);
+            byte[] buffer = new byte[1024];
+            int length;
+            while ((length = is.read(buffer)) > 0) {
+                os.write(buffer, 0, length);
+            }
+        } finally {
+            is.close();
+            os.close();
         }
     }
 }
