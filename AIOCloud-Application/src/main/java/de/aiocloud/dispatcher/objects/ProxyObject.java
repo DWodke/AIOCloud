@@ -46,6 +46,7 @@ public class ProxyObject {
         try {
             this.serversocket = new ServerSocket(this.dispatcherport);
             AIOCloud.logginghandler.print("Open channel [host: " + this.address + ", port: " + this.dispatcherport + "]", LoggingType.ERROR);
+            this.connect();
         } catch (Exception e) {
             AIOCloud.logginghandler.print("ERROR while open channel for proxy '" + this.name + "'.", LoggingType.ERROR);
             TimeHandler.sleep(1000L);

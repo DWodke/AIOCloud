@@ -38,6 +38,7 @@ public class Dispatcher {
 		availableworker = new HashMap<String, WorkerObject>();
 		register();
 		FileManager.registerAllWorker();
+		FileManager.registerAllProxies();
 		startCommandReading();
 	}
 	/**

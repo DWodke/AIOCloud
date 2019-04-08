@@ -9,6 +9,7 @@ import de.aiocloud.dispatcher.Dispatcher;
 import de.aiocloud.dispatcher.utils.FileManager;
 import de.aiocloud.library.connector.Packet;
 import de.aiocloud.library.security.SecurityManager;
+import de.aiocloud.library.time.TimeHandler;
 import de.aiocloud.logger.LoggingType;
 
 import java.io.BufferedReader;
@@ -30,6 +31,8 @@ public class WorkerObject {
     private Gson gson;
     private JsonParser parser;
     private Integer totalram;
+    private Boolean connection;
+    private WorkerObject instance;
 
     /**
      * This is the initial method of the 'WorkerObject' object.
@@ -46,12 +49,15 @@ public class WorkerObject {
         this.gson = new GsonBuilder().create();
         this.parser = new JsonParser();
         this.totalram = 0;
+        this.connection = false;
+        this.instance = this;
         this.open();
     }
     /**
      * This method open a channel for a worker.
      */
     public void open() {
+        this.connection = false;
         try {
             this.serversocket = new ServerSocket(this.port);
             connect();
@@ -63,6 +69,7 @@ public class WorkerObject {
      * This method connect to the worker.
      */
     public void connect() {
+        this.connection = false;
         new Thread(new Runnable() {
             public void run() {
                 try {
@@ -75,10 +82,7 @@ public class WorkerObject {
                 } catch (Exception e) {
                     AIOCloud.logginghandler.print("Channel with port '" + port + "' caused an error.", LoggingType.ERROR);
                     AIOCloud.logginghandler.print("Trying again to open channel with port '" + port + "'.", LoggingType.INFO);
-                    try {
-                        Thread.sleep(3000);
-                    } catch (InterruptedException ignore) {
-                    }
+                    TimeHandler.sleep(3000L);
                     connect();
                     return;
                 }
@@ -111,6 +115,12 @@ public class WorkerObject {
                                         jsonObject.addProperty("serverVersion", FileManager.config.getServerVersion());
                                         jsonObject.addProperty("proxyVersion", FileManager.config.getProxyVersion());
                                         new Packet(jsonObject).send(chatsocket);
+                                        connection = true;
+                                        for(ProxyGroupObject group : Dispatcher.proxygroups.values()) {
+                                            if(group.getWorker() == instance) {
+                                                group.doStartup();
+                                            }
+                                        }
                                     } else {
                                         AIOCloud.logginghandler.print("Connection to '" + workername + "' refused.", LoggingType.WARNING);
                                         AIOCloud.logginghandler.print("Reason: verify-key does not equals!", LoggingType.WARNING);
@@ -177,5 +187,12 @@ public class WorkerObject {
      */
     public Socket getChatSocket() {
         return chatsocket;
+    }
+    /**
+     * GET is the worker started.
+     * @return
+     */
+    public Boolean isConnected() {
+        return connection;
     }
 }

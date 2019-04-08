@@ -5,7 +5,9 @@ import com.google.gson.stream.JsonReader;
 import de.aiocloud.AIOCloud;
 import de.aiocloud.dispatcher.Dispatcher;
 import de.aiocloud.dispatcher.objects.Config;
+import de.aiocloud.dispatcher.objects.ProxyGroupObject;
 import de.aiocloud.dispatcher.objects.WorkerObject;
+import de.aiocloud.library.json.JsonArrayParser;
 import de.aiocloud.logger.LoggingType;
 
 import java.io.*;
@@ -194,6 +196,29 @@ public class FileManager {
 					Dispatcher.availableworker.put(name, new WorkerObject(config.getHostname(), json.get("port").getAsInt(), name, json.get("authToken").getAsString()));
 					Dispatcher.portmanager.addWorkerPort(json.get("port").getAsInt());
 					AIOCloud.logginghandler.print("Worker loaded [name: " + name + ", authToken: " + json.get("authToken").getAsString() + ", port: " + json.get("port").getAsInt() + "]", LoggingType.INFO);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	/**
+	 * This method registered all worker in the dispatcher.
+	 */
+	public static void registerAllProxies() {
+		try {
+			AIOCloud.logginghandler.print("Load all proxy-groups:", LoggingType.INFO);
+			if(workerdir.listFiles() == null) {
+				AIOCloud.logginghandler.print("No proxy-groups available....", LoggingType.WARNING);
+				return;
+			}
+			for(File file : proxygroupdir.listFiles()) {
+				if(file.getName().endsWith("json")) {
+					String name = file.getName().replaceAll(".json", "");
+					JsonReader reader = new JsonReader(new FileReader(file));
+					JsonObject json = gson.fromJson(reader, JsonObject.class);
+					Dispatcher.proxygroups.put(name, new ProxyGroupObject(name, json.get("startPort").getAsInt(), Dispatcher.availableworker.get(json.get("worker").getAsString()), json.get("save_logs").getAsBoolean(), json.get("memory").getAsInt(), json.get("dynamic").getAsBoolean(), json.get("minOnline").getAsInt(), json.get("maxOnline").getAsInt(), json.get("maintenance").getAsBoolean(), new JsonArrayParser(json.get("motd").getAsJsonArray()).getStringArray()));
+					AIOCloud.logginghandler.print("ProxyGroup loaded [name: " + name + ", startPort: " + json.get("startPort").getAsInt() + ", Worker: " + json.get("worker").getAsString() + "]", LoggingType.INFO);
 				}
 			}
 		} catch (Exception e) {

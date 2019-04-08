@@ -34,7 +34,7 @@ public class ProxyGroupObject {
      * @param minonline
      * @param maxonline
      */
-    public ProxyGroupObject(String name, Integer startport, WorkerObject worker, Boolean save_logs, Integer memory, Boolean dynamic, Integer minonline, Integer maxonline, Boolean maintenance, String[] motd) {
+    public ProxyGroupObject(String name, Integer startport, final WorkerObject worker, Boolean save_logs, Integer memory, Boolean dynamic, final Integer minonline, Integer maxonline, Boolean maintenance, String[] motd) {
         this.availableproxies = new HashMap<String, ProxyObject>();
         this.name = name;
         this.worker = worker;
@@ -77,9 +77,19 @@ public class ProxyGroupObject {
             json.addProperty("memory", this.memory);
             json.addProperty("dynamic", this.dynamic);
             new Packet(json).send(this.worker.getChatSocket());
-            new ProxyObject(this.name + FileManager.config.getDefaultSeperator() + id, FileManager.config.getHostname(), connectionport, port, this);
+            availableproxies.put(this.name + FileManager.config.getDefaultSeperator() + id, new ProxyObject(this.name + FileManager.config.getDefaultSeperator() + id, FileManager.config.getHostname(), connectionport, port, this));
         } else {
             AIOCloud.logginghandler.print("The proxy with id '" + id + "' can't start, because the worker doesn't have enough of memory!", LoggingType.WARNING);
+        }
+    }
+    /**
+     * This method do the setup of the group.
+     */
+    public void doStartup() {
+        int i = 1;
+        while(i <= minonline) {
+            startProxy(i);
+            i++;
         }
     }
     /**
@@ -111,5 +121,11 @@ public class ProxyGroupObject {
     }
     public WorkerObject getWorker() {
         return worker;
+    }
+    public Boolean getMaintenance() {
+        return maintenance;
+    }
+    public String[] getMotd() {
+        return motd;
     }
 }
