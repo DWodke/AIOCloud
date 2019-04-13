@@ -67,7 +67,7 @@ public class WorkerSetup {
                     break;
                 }
 
-                case 4 : AIOCloud.logginghandler.print("Please provide the worker-id from the dispatcher screen. (UUID)", LoggingType.INFO); line = AIOCloud.reader.readLine();
+                case 4 : AIOCloud.logginghandler.print("Please provide the auth-token from the dispatcher screen. (UUID)", LoggingType.INFO); line = AIOCloud.reader.readLine();
                     this.workerid = line;
                     this.taskid = this.taskid +1;
                     this.nextQuestion();
