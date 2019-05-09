@@ -223,7 +223,7 @@ public class FileManager {
 					String name = file.getName().replaceAll(".json", "");
 					JsonReader reader = new JsonReader(new FileReader(file));
 					JsonObject json = gson.fromJson(reader, JsonObject.class);
-					Dispatcher.proxygroups.put(name, new ProxyGroupObject(name, json.get("startPort").getAsInt(), Dispatcher.availableworker.get(json.get("worker").getAsString()), json.get("save_logs").getAsBoolean(), json.get("memory").getAsInt(), json.get("dynamic").getAsBoolean(), json.get("minOnline").getAsInt(), json.get("maxOnline").getAsInt(), json.get("maintenance").getAsBoolean(), new JsonArrayParser(json.get("motd").getAsJsonArray()).getStringArray(), new JsonArrayParser(json.get("action").getAsJsonArray()).getStringArray(), json.get("playerSize").getAsString(), json.get("maintenancePlayerSize").getAsString()));
+					Dispatcher.proxygroups.put(name, new ProxyGroupObject(name, file));
 					AIOCloud.logginghandler.print("ProxyGroup loaded [name: " + name + ", startPort: " + json.get("startPort").getAsInt() + ", Worker: " + json.get("worker").getAsString() + "]", LoggingType.INFO);
 				}
 			}

@@ -6,6 +6,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonReader;
 import de.aiocloud.AIOCloud;
+import de.aiocloud.library.json.JsonArrayParser;
+import de.aiocloud.logger.LoggingType;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
@@ -96,24 +98,36 @@ public class ProxyConfig {
             writer.flush();
             writer.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            AIOCloud.logginghandler.print("ERROR while create proxyConfig from group '" + this.name + "'.", LoggingType.ERROR);
         }
     }
     /**
      * This method load all data from the config file.
      */
-    public void load() {
+    public Boolean load() {
         try {
             JsonReader reader = new JsonReader(new InputStreamReader(new FileInputStream(this.file), "UTF-8"));
             JsonObject json = gson.fromJson(reader, JsonObject.class);
             this.name = json.get("name").getAsString();
             this.dynamic = json.get("dynamic").getAsBoolean();
             this.maintenance = json.get("maintenance").getAsBoolean();
-            JsonArray actionarray = json.get("action").getAsJsonArray();
-            Arrays.
-            this.action =
+            this.action = new JsonArrayParser(json.get("action").getAsJsonArray()).getStringArray();
+            this.maintenanceaction = new JsonArrayParser(json.get("maintenanceAction").getAsJsonArray()).getStringArray();
+            this.motd = new JsonArrayParser(json.get("motd").getAsJsonArray()).getStringArray();
+            this.maintenancemotd = new JsonArrayParser(json.get("maintenanceMotd").getAsJsonArray()).getStringArray();
+            this.memory = json.get("memory").getAsInt();
+            this.minonline = json.get("minOnline").getAsInt();
+            this.maxonline = json.get("maxOnline").getAsInt();
+            this.maintenanceplayersize = json.get("maintenancePlayerSize").getAsString();
+            this.playersize = json.get("playerSize").getAsString();
+            this.createdat = json.get("createdAt").getAsString();
+            this.save_logs = json.get("save_logs").getAsBoolean();
+            this.worker = json.get("worker").getAsString();
+            this.startport = json.get("startPort").getAsInt();
+            return true;
         } catch (Exception e) {
-            e.printStackTrace();
+            AIOCloud.logginghandler.print("ERROR while load file from group '" + this.name + "'.", LoggingType.ERROR);
+            return false;
         }
     }
     /**
@@ -167,5 +181,57 @@ public class ProxyConfig {
     }
     public void setMaintenancePlayerSize(String maintenanceplayersize) {
         this.maintenanceplayersize = maintenanceplayersize;
+    }
+    /**
+     * This methods are get methods.
+     * @return
+     */
+    public Boolean getDynamic() {
+        return dynamic;
+    }
+    public String getName() {
+        return name;
+    }
+    public Boolean getMaintenance() {
+        return maintenance;
+    }
+    public Boolean getSave_logs() {
+        return save_logs;
+    }
+    public Integer getMaxOnline() {
+        return maxonline;
+    }
+    public Integer getMemory() {
+        return memory;
+    }
+    public Integer getStartPort() {
+        return startport;
+    }
+    public String getCreatedAt() {
+        return createdat;
+    }
+    public Integer getMinOnline() {
+        return minonline;
+    }
+    public String getWorker() {
+        return worker;
+    }
+    public String[] getAction() {
+        return action;
+    }
+    public String getMaintenancePlayerSize() {
+        return maintenanceplayersize;
+    }
+    public String getPlayerSize() {
+        return playersize;
+    }
+    public String[] getMaintenanceAction() {
+        return maintenanceaction;
+    }
+    public String[] getMotd() {
+        return motd;
+    }
+    public String[] getMaintenanceMotd() {
+        return maintenancemotd;
     }
 }
