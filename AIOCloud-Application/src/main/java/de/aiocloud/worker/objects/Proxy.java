@@ -69,7 +69,11 @@ public class Proxy {
             }
         }
         try {
-            FileManager.copyFile(new File(FileManager.filesdir.getPath() + "/proxy.jar"), dir);
+            File jarfile = new File(FileManager.filesdir.getPath() + "/proxy.jar");
+            if(jarfile.exists()) {
+                jarfile.delete();
+            }
+            FileManager.copyFile(jarfile, dir);
         } catch (IOException e) {
             AIOCloud.logginghandler.print("ERROR while copy file: " + FileManager.filesdir.getPath() + "/proxy.jar", LoggingType.ERROR);
         }

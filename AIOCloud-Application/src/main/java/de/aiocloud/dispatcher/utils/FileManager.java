@@ -160,10 +160,16 @@ public class FileManager {
 				json.addProperty("dynamic", dynamic);
 				json.addProperty("maintenance", true);
 				JsonArray motdarray = new JsonArray();
+				JsonArray action = new JsonArray();
 				motdarray.add("&6AIOCloud - Application &7| &cfree to use for all.");
 				motdarray.add("&6Version: &c" + AIOCloud.versionhandler.getCurrentVersion());
 				json.add("motd", motdarray);
-				json.addProperty("dynamic", dynamic);
+				action.add("&6AIOCloud - Application &7| &cSimple, extensive and exclusive for you.");
+				action.add("&6Programmed by: &cDominik Wodke");
+				action.add("&6Version: &c" + AIOCloud.versionhandler.getCurrentVersion());
+				json.add("action", action);
+				json.addProperty("playerSize", "&7%onlinePlayers%/%maxPlayers%");
+				json.addProperty("maintenancePlayerSize", "&cMaintenance");
 				SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 				json.addProperty("createdAt", format.format(new Date()));
 				writer.write(gson.toJson(json));
@@ -184,7 +190,7 @@ public class FileManager {
 	public static void registerAllWorker() {
 		try {
 			AIOCloud.logginghandler.print("Load all worker:", LoggingType.INFO);
-			if(workerdir.listFiles() == null) {
+			if(workerdir.listFiles() == null || workerdir.listFiles().length == 0) {
 				AIOCloud.logginghandler.print("No Worker available....", LoggingType.WARNING);
 				return;
 			}
@@ -208,7 +214,7 @@ public class FileManager {
 	public static void registerAllProxies() {
 		try {
 			AIOCloud.logginghandler.print("Load all proxy-groups:", LoggingType.INFO);
-			if(workerdir.listFiles() == null) {
+			if(proxygroupdir.listFiles() == null || proxygroupdir.listFiles().length == 0) {
 				AIOCloud.logginghandler.print("No proxy-groups available....", LoggingType.WARNING);
 				return;
 			}
@@ -217,7 +223,7 @@ public class FileManager {
 					String name = file.getName().replaceAll(".json", "");
 					JsonReader reader = new JsonReader(new FileReader(file));
 					JsonObject json = gson.fromJson(reader, JsonObject.class);
-					Dispatcher.proxygroups.put(name, new ProxyGroupObject(name, json.get("startPort").getAsInt(), Dispatcher.availableworker.get(json.get("worker").getAsString()), json.get("save_logs").getAsBoolean(), json.get("memory").getAsInt(), json.get("dynamic").getAsBoolean(), json.get("minOnline").getAsInt(), json.get("maxOnline").getAsInt(), json.get("maintenance").getAsBoolean(), new JsonArrayParser(json.get("motd").getAsJsonArray()).getStringArray()));
+					Dispatcher.proxygroups.put(name, new ProxyGroupObject(name, json.get("startPort").getAsInt(), Dispatcher.availableworker.get(json.get("worker").getAsString()), json.get("save_logs").getAsBoolean(), json.get("memory").getAsInt(), json.get("dynamic").getAsBoolean(), json.get("minOnline").getAsInt(), json.get("maxOnline").getAsInt(), json.get("maintenance").getAsBoolean(), new JsonArrayParser(json.get("motd").getAsJsonArray()).getStringArray(), new JsonArrayParser(json.get("action").getAsJsonArray()).getStringArray(), json.get("playerSize").getAsString(), json.get("maintenancePlayerSize").getAsString()));
 					AIOCloud.logginghandler.print("ProxyGroup loaded [name: " + name + ", startPort: " + json.get("startPort").getAsInt() + ", Worker: " + json.get("worker").getAsString() + "]", LoggingType.INFO);
 				}
 			}

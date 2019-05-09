@@ -22,6 +22,9 @@ public class ProxyGroupObject {
     private Integer maxonline;
     private Boolean maintenance;
     private String[] motd;
+    private String[] action;
+    private String playersize;
+    private String maintenanceplayersize;
 
     /**
      * This is the initial method of the 'ProxyGroupObject'.
@@ -34,7 +37,7 @@ public class ProxyGroupObject {
      * @param minonline
      * @param maxonline
      */
-    public ProxyGroupObject(String name, Integer startport, final WorkerObject worker, Boolean save_logs, Integer memory, Boolean dynamic, final Integer minonline, Integer maxonline, Boolean maintenance, String[] motd) {
+    public ProxyGroupObject(String name, Integer startport, final WorkerObject worker, Boolean save_logs, Integer memory, Boolean dynamic, final Integer minonline, Integer maxonline, Boolean maintenance, String[] motd, String[] action, String playerSize, String maintenancePlayerSize) {
         this.availableproxies = new HashMap<String, ProxyObject>();
         this.name = name;
         this.worker = worker;
@@ -46,6 +49,10 @@ public class ProxyGroupObject {
         this.startport = startport;
         this.maintenance = maintenance;
         this.motd = motd;
+        this.action = action;
+        this.playersize = playerSize;
+        this.maintenanceplayersize = maintenancePlayerSize;
+        this.doStartup();
     }
     /**
      * GET a available proxy.
@@ -88,7 +95,7 @@ public class ProxyGroupObject {
     public void doStartup() {
         int i = 1;
         while(i <= minonline) {
-            startProxy(i);
+            this.startProxy(i);
             i++;
         }
     }
@@ -127,5 +134,14 @@ public class ProxyGroupObject {
     }
     public String[] getMotd() {
         return motd;
+    }
+    public String[] getAction() {
+        return action;
+    }
+    public String getMaintenancePlayerSize() {
+        return maintenanceplayersize;
+    }
+    public String getPlayerSize() {
+        return playersize;
     }
 }
