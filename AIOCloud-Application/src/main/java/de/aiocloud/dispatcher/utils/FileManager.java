@@ -4,6 +4,7 @@ import com.google.gson.*;
 import com.google.gson.stream.JsonReader;
 import de.aiocloud.AIOCloud;
 import de.aiocloud.dispatcher.Dispatcher;
+import de.aiocloud.dispatcher.configs.ProxyConfig;
 import de.aiocloud.dispatcher.objects.Config;
 import de.aiocloud.dispatcher.objects.ProxyGroupObject;
 import de.aiocloud.dispatcher.objects.WorkerObject;
@@ -112,18 +113,8 @@ public class FileManager {
 			File workerfile = new File(workerdir.getPath() + "/" + name + ".json");
 			if(!workerfile.exists()) {
 				workerfile.createNewFile();
-				FileWriter writer = new FileWriter(workerfile);
-				JsonObject json = new JsonObject();
-				json.addProperty("name", name);
-				json.addProperty("authToken", UUID.randomUUID().toString());
 				Integer port = Dispatcher.portmanager.getNextFreeWorkerPort();
-				json.addProperty("port", port);
-				Dispatcher.portmanager.addWorkerPort(port);
 				SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-				json.addProperty("createdAt", format.format(new Date()).toString());
-				writer.write(gson.toJson(json));
-				writer.flush();
-				writer.close();
 				return true;
 			} else {
 				return false;
@@ -148,33 +139,30 @@ public class FileManager {
 			File proxygroupfile = new File(proxygroupdir.getPath() + "/" + name + ".json");
 			if(!proxygroupfile.exists()) {
 				proxygroupfile.createNewFile();
-				FileWriter writer = new FileWriter(proxygroupfile);
-				JsonObject json = new JsonObject();
-				json.addProperty("name", name);
-				json.addProperty("worker", worker);
-				json.addProperty("startPort", 25565);
-				json.addProperty("save_logs", true);
-				json.addProperty("memory", memory);
-				json.addProperty("minOnline", online);
-				json.addProperty("maxOnline", maxonline);
-				json.addProperty("dynamic", dynamic);
-				json.addProperty("maintenance", true);
-				JsonArray motdarray = new JsonArray();
-				JsonArray action = new JsonArray();
-				motdarray.add("&6AIOCloud - Application &7| &cfree to use for all.");
-				motdarray.add("&6Version: &c" + AIOCloud.versionhandler.getCurrentVersion());
-				json.add("motd", motdarray);
-				action.add("&6AIOCloud - Application &7| &cSimple, extensive and exclusive for you.");
-				action.add("&6Programmed by: &cDominik Wodke");
-				action.add("&6Version: &c" + AIOCloud.versionhandler.getCurrentVersion());
-				json.add("action", action);
-				json.addProperty("playerSize", "&7%onlinePlayers%/%maxPlayers%");
-				json.addProperty("maintenancePlayerSize", "&cMaintenance");
+				ProxyConfig config = new ProxyConfig(proxygroupfile);
+				config.setName(name);
+				config.setWorker(worker);
+				config.setStartPort(25565);
+				config.setSave_logs(true);
+				config.setMemory(memory);
+				config.setMinOnline(online);
+				config.setMaxOnline(maxonline);
+				config.setDynamic(dynamic);
+				config.setMaintenance(true);
+				config.setMotd(new String[]{"&6AIOCloud-Application &7| &eSimple, extensive and exclusive.",
+						"&6Version: &e" + AIOCloud.versionhandler.getCurrentVersion()});
+				config.setMaintenanceMotd(new String[]{"&6AIOCloud-Application &7| &eSimple, extensive and exclusive.",
+						"&6Version: &e" + AIOCloud.versionhandler.getCurrentVersion()});
+				config.setAction(new String[]{"&6AIOCloud-Application",
+						"&6Version: &e" + AIOCloud.versionhandler.getCurrentVersion(),
+						"&6Discord: &ediscord.gg/3keBE3Y"});
+				config.setMaintenanceAction(new String[]{"&6AIOCloud-Application",
+						"&6Version: &e" + AIOCloud.versionhandler.getCurrentVersion(),
+						"&6Discord: &ediscord.gg/3keBE3Y"});
+				config.setPlayerSize("&7%onlinePlayers%/%maxPlayers%");
+				config.setMaintenancePlayerSize("&cMaintenance");
 				SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-				json.addProperty("createdAt", format.format(new Date()));
-				writer.write(gson.toJson(json));
-				writer.flush();
-				writer.close();
+				config.setCreatedAt(format.format(new Date()));
 				return true;
 			} else {
 				return false;

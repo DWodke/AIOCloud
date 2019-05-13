@@ -165,7 +165,7 @@ public class WorkerObject {
         for(ProxyGroupObject group : Dispatcher.proxygroups.values()) {
             if(group.getWorker() == this) {
                 for(ProxyObject proxy : group.getAvailableProxies().values()) {
-                    used = used + group.getMemory();
+                    used = used + group.getConfig().getMemory();
                 }
             }
         }

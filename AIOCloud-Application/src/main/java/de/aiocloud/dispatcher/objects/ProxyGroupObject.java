@@ -87,4 +87,7 @@ public class ProxyGroupObject {
     public WorkerObject getWorker() {
         return worker;
     }
+    public HashMap<String, ProxyObject> getAvailableProxies() {
+        return availableproxies;
+    }
 }
