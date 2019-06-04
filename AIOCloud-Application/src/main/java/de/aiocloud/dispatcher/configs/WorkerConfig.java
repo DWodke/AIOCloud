@@ -7,10 +7,10 @@ import com.google.gson.stream.JsonReader;
 import de.aiocloud.AIOCloud;
 import de.aiocloud.dispatcher.Dispatcher;
 import de.aiocloud.dispatcher.utils.FileManager;
-import de.aiocloud.library.json.JsonArrayParser;
 import de.aiocloud.logger.LoggingType;
 
 import java.io.*;
+import java.util.UUID;
 
 public class WorkerConfig {
 
@@ -21,7 +21,7 @@ public class WorkerConfig {
     private String authtoken;
     private String createdat;
     private File file;
-    private static Gson gson;
+    private Gson gson;
 
     /**
      * This is the initial method of the 'ProxyConfig' object.
@@ -48,7 +48,7 @@ public class WorkerConfig {
             FileWriter writer = new FileWriter(this.file);
             JsonObject json = new JsonObject();
             json.addProperty("name", this.name);
-            json.addProperty("authToken", this.authtoken);
+            json.addProperty("authToken", UUID.randomUUID().toString());
             json.addProperty("port", this.port);
             json.addProperty("host", this.host);
             Dispatcher.portmanager.addWorkerPort(this.port);
@@ -57,7 +57,7 @@ public class WorkerConfig {
             writer.flush();
             writer.close();
         } catch (IOException e) {
-            AIOCloud.logginghandler.print("ERROR while create proxyConfig from group '" + this.name + "'.", LoggingType.ERROR);
+            AIOCloud.logginghandler.print("ERROR while create workerConfig from worker '" + this.name + "'.", LoggingType.ERROR);
         }
     }
     /**
@@ -75,7 +75,7 @@ public class WorkerConfig {
             this.id = Integer.parseInt(this.name.split(FileManager.config.getDefaultSeperator())[1]);
             return true;
         } catch (Exception e) {
-            AIOCloud.logginghandler.print("ERROR while load file from group '" + this.name + "'.", LoggingType.ERROR);
+            AIOCloud.logginghandler.print("ERROR while load file from worker '" + this.name + "'.", LoggingType.ERROR);
             return false;
         }
     }
@@ -86,101 +86,38 @@ public class WorkerConfig {
     public void setName(String name) {
         this.name = name;
     }
-    public void setDynamic(Boolean dynamic) {
-        this.dynamic = dynamic;
-    }
-    public void setMaxOnline(Integer maxonline) {
-        this.maxonline = maxonline;
-    }
-    public void setMaintenance(Boolean maintenance) {
-        this.maintenance = maintenance;
-    }
-    public void setMemory(Integer memory) {
-        this.memory = memory;
-    }
-    public void setMinOnline(Integer minonline) {
-        this.minonline = minonline;
-    }
-    public void setSave_logs(Boolean save_logs) {
-        this.save_logs = save_logs;
-    }
-    public void setMotd(String[] motd) {
-        this.motd = motd;
-    }
-    public void setMaintenanceMotd(String[] maintenancemotd) {
-        this.maintenancemotd = maintenancemotd;
-    }
-    public void setAction(String[] action) {
-        this.action = action;
-    }
-    public void setStartPort(Integer startport) {
-        this.startport = startport;
-    }
-    public void setWorker(String worker) {
-        this.worker = worker;
-    }
-    public void setMaintenanceAction(String[] maintenanceaction) {
-        this.maintenanceaction = maintenanceaction;
-    }
-    public void setPlayerSize(String playersize) {
-        this.playersize = playersize;
-    }
     public void setCreatedAt(String createdat) {
         this.createdat = createdat;
     }
-    public void setMaintenancePlayerSize(String maintenanceplayersize) {
-        this.maintenanceplayersize = maintenanceplayersize;
+    public void setHost(String host) {
+        this.host = host;
+    }
+    public void setId(Integer id) {
+        this.id = id;
+    }
+    public void setPort(Integer port) {
+        this.port = port;
     }
     /**
      * This methods are get methods.
      * @return
      */
-    public Boolean getDynamic() {
-        return dynamic;
-    }
     public String getName() {
         return name;
-    }
-    public Boolean getMaintenance() {
-        return maintenance;
-    }
-    public Boolean getSave_logs() {
-        return save_logs;
-    }
-    public Integer getMaxOnline() {
-        return maxonline;
-    }
-    public Integer getMemory() {
-        return memory;
-    }
-    public Integer getStartPort() {
-        return startport;
     }
     public String getCreatedAt() {
         return createdat;
     }
-    public Integer getMinOnline() {
-        return minonline;
+    public String getHost() {
+        return host;
     }
-    public String getWorker() {
-        return worker;
+    public Integer getPort() {
+        return port;
     }
-    public String[] getAction() {
-        return action;
+    public String getAuthToken() {
+        return authtoken;
     }
-    public String getMaintenancePlayerSize() {
-        return maintenanceplayersize;
-    }
-    public String getPlayerSize() {
-        return playersize;
-    }
-    public String[] getMaintenanceAction() {
-        return maintenanceaction;
-    }
-    public String[] getMotd() {
-        return motd;
-    }
-    public String[] getMaintenanceMotd() {
-        return maintenancemotd;
+    public Integer getId() {
+        return id;
     }
 }

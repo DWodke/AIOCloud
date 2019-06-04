@@ -87,7 +87,14 @@ public class DispatcherObject {
                             if(key.equalsIgnoreCase("registration")) {
                                 serverversion = new ServerVersion(json.get("serverVersion").getAsString(), json.get("minecraftVersion").getAsString(), json.get("proxyVersion").getAsString());
                             } else if(key.equalsIgnoreCase("startProxy")) {
-
+                                new Proxy(json.get("name").getAsString()
+                                        , json.get("id").getAsInt()
+                                        , json.get("port").getAsInt()
+                                        , json.get("memory").getAsInt()
+                                        , json.get("dispatcherHost").getAsString()
+                                        , json.get("dispatcherPort").getAsInt()
+                                        , json.get("dynamic").getAsBoolean()
+                                        , json.get("save_logs").getAsBoolean()).start();
                             }
                         }
                     }

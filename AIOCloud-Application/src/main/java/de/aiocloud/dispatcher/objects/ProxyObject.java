@@ -34,8 +34,12 @@ public class ProxyObject {
         this.dispatcherport = dispatcherport;
         this.proxygroup = proxygroup;
         this.serverport = serverport;
-        String[] idsplitter = this.name.split(FileManager.config.getDefaultSeperator());
-        this.id = Integer.parseInt(idsplitter[idsplitter.length -1]);
+        try {
+            String[] idsplitter = this.name.split(FileManager.config.getDefaultSeperator());
+            this.id = Integer.parseInt(idsplitter[idsplitter.length -1]);
+        } catch (NumberFormatException e) {
+            AIOCloud.logginghandler.print("ERROR while parsing int: " + e.getMessage(), LoggingType.ERROR);
+        }
         this.parser = new JsonParser();
         this.open();
     }

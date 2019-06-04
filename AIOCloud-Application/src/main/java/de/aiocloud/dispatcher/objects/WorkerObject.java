@@ -1,18 +1,17 @@
 package de.aiocloud.dispatcher.objects;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import de.aiocloud.AIOCloud;
 import de.aiocloud.dispatcher.Dispatcher;
+import de.aiocloud.dispatcher.configs.WorkerConfig;
 import de.aiocloud.dispatcher.utils.FileManager;
 import de.aiocloud.library.connector.Packet;
 import de.aiocloud.library.security.SecurityManager;
 import de.aiocloud.library.time.TimeHandler;
 import de.aiocloud.logger.LoggingType;
-
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.ServerSocket;
@@ -22,35 +21,28 @@ import java.security.spec.InvalidKeySpecException;
 
 public class WorkerObject {
 
-    private String hostaddress;
-    private Integer port;
     private String workername;
-    private String workerid;
     private ServerSocket serversocket;
     private Socket chatsocket;
-    private Gson gson;
     private JsonParser parser;
-    private Integer totalram;
     private Boolean connection;
+    private WorkerConfig config;
+    private Integer totalram;
     private WorkerObject instance;
 
     /**
      * This is the initial method of the 'WorkerObject' object.
-     * @param host is the host-address of the worker.
-     * @param port is the port of the worker.
+     * @param file is the config file of the worker.
      * @param name is the name of the worker.
-     * @param id is the id of the worker.
      */
-    public WorkerObject(String host, Integer port, String name, String id) {
-        this.hostaddress = host;
-        this.port = port;
+    public WorkerObject(String name, File file) {
+        this.config = new WorkerConfig(file);
+        this.config.load();
         this.workername = name;
-        this.workerid = id;
-        this.gson = new GsonBuilder().create();
         this.parser = new JsonParser();
-        this.totalram = 0;
         this.connection = false;
         this.instance = this;
+        this.totalram = 0;
         this.open();
     }
     /**
@@ -59,10 +51,10 @@ public class WorkerObject {
     public void open() {
         this.connection = false;
         try {
-            this.serversocket = new ServerSocket(this.port);
+            this.serversocket = new ServerSocket(this.config.getPort());
             connect();
         } catch (Exception e) {
-            AIOCloud.logginghandler.print("Channel for worker with id '" + this.workerid + "' and the port '" + this.port + "' can't open...", LoggingType.ERROR);
+            AIOCloud.logginghandler.print("Channel for worker with id '" + this.config.getId() + "' and the port '" + this.config.getPort() + "' can't open...", LoggingType.ERROR);
         }
     }
     /**
@@ -80,8 +72,8 @@ public class WorkerObject {
                         break;
                     }
                 } catch (Exception e) {
-                    AIOCloud.logginghandler.print("Channel with port '" + port + "' caused an error.", LoggingType.ERROR);
-                    AIOCloud.logginghandler.print("Trying again to open channel with port '" + port + "'.", LoggingType.INFO);
+                    AIOCloud.logginghandler.print("Channel with port '" + config.getPort() + "' caused an error.", LoggingType.ERROR);
+                    AIOCloud.logginghandler.print("Trying again to open channel with port '" + config.getPort() + "'.", LoggingType.INFO);
                     TimeHandler.sleep(3000L);
                     connect();
                     return;
@@ -105,7 +97,7 @@ public class WorkerObject {
                             String key = json.get("key").getAsString();
                             if(key != null) {
                                 if(key.equalsIgnoreCase("registration")) {
-                                    if(SecurityManager.checkHash(workerid, json.get("authToken").getAsString())) {
+                                    if(SecurityManager.checkHash(config.getAuthToken(), json.get("authToken").getAsString())) {
                                         totalram = json.get("totalRam").getAsInt();
                                         AIOCloud.logginghandler.print("The worker '" + workername + "' has verified successfully.", LoggingType.INFO);
                                         AIOCloud.logginghandler.print("He has " + totalram + " megabyte of memory available.", LoggingType.INFO);

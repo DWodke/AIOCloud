@@ -23,7 +23,7 @@ public class Config {
         workeraddress = json.get("hostAddress").getAsString();
         dispatcheraddress = json.get("dispatcherAddress").getAsString();
         dispatcherport = json.get("dispatcherPort").getAsInt();
-        workerid = json.get("workerId").getAsString();
+        workerid = json.get("authToken").getAsString();
         totalram = json.get("totalRam").getAsInt();
     }
     /**

@@ -28,7 +28,6 @@ public class ProxyGroupObject {
         this.config.load();
         this.name = name;
         this.worker = Dispatcher.availableworker.get(this.config.getWorker());
-        this.doStartup();
     }
     /**
      * GET a available proxy.
@@ -40,11 +39,9 @@ public class ProxyGroupObject {
     }
     public void startProxy(Integer id) {
         if(this.worker.hasWorkerEnoughMemory(this.config.getMemory())) {
-            for(ProxyObject proxy : availableproxies.values()) {
-                if(proxy.getId() == id) {
-                    AIOCloud.logginghandler.print("The proxy with id '" + id + "' can't start, because an proxy with the same id is started!", LoggingType.WARNING);
-                    return;
-                }
+            if(availableproxies.containsKey(this.name + FileManager.config.getDefaultSeperator() + id)) {
+                AIOCloud.logginghandler.print("The proxy with id '" + id + "' can't start, because an proxy with the same id is started!", LoggingType.WARNING);
+                return;
             }
             Integer connectionport = Dispatcher.portmanager.getNextFreeProxyConnectionPort();
             Dispatcher.portmanager.addProxyConnectionPort(connectionport);
@@ -55,10 +52,11 @@ public class ProxyGroupObject {
             json.addProperty("name", this.name + FileManager.config.getDefaultSeperator() + id);
             json.addProperty("id", id);
             json.addProperty("dispatcherHost", FileManager.config.getHostname());
-            json.addProperty("dispatcherPort",  connectionport);
+            json.addProperty("dispatcherPort", connectionport);
             json.addProperty("port", port);
             json.addProperty("memory", this.config.getMemory());
             json.addProperty("dynamic", this.config.getDynamic());
+            json.addProperty("save_logs", this.config.getSave_logs());
             new Packet(json).send(this.worker.getChatSocket());
             availableproxies.put(this.name + FileManager.config.getDefaultSeperator() + id, new ProxyObject(this.name + FileManager.config.getDefaultSeperator() + id, FileManager.config.getHostname(), connectionport, port, this));
         } else {

@@ -5,16 +5,14 @@ import com.google.gson.stream.JsonReader;
 import de.aiocloud.AIOCloud;
 import de.aiocloud.dispatcher.Dispatcher;
 import de.aiocloud.dispatcher.configs.ProxyConfig;
+import de.aiocloud.dispatcher.configs.WorkerConfig;
 import de.aiocloud.dispatcher.objects.Config;
 import de.aiocloud.dispatcher.objects.ProxyGroupObject;
 import de.aiocloud.dispatcher.objects.WorkerObject;
-import de.aiocloud.library.json.JsonArrayParser;
 import de.aiocloud.logger.LoggingType;
-
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.UUID;
 
 public class FileManager {
 
@@ -85,7 +83,7 @@ public class FileManager {
 			writer.flush();
 			writer.close();
 			loadDispatcherConfig();
-			createWorker("Worker-1");
+			createWorker("Worker", host, 1);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -108,13 +106,20 @@ public class FileManager {
 	 * @param name its the name of the worker.
 	 * @return boolean.
 	 */
-	public static Boolean createWorker(String name) {
+	public static Boolean createWorker(String name, String hostname, Integer id) {
 		try {
-			File workerfile = new File(workerdir.getPath() + "/" + name + ".json");
+			File workerfile = new File(workerdir.getPath() + "/" + name + config.getDefaultSeperator() + id + ".json");
 			if(!workerfile.exists()) {
 				workerfile.createNewFile();
 				Integer port = Dispatcher.portmanager.getNextFreeWorkerPort();
+				WorkerConfig cfg = new WorkerConfig(workerfile);
+				cfg.setName(name + config.getDefaultSeperator() + id);
+				cfg.setPort(port);
+				cfg.setHost(hostname);
+				cfg.setId(id);
 				SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+				cfg.setCreatedAt(format.format(new Date()));
+				cfg.create();
 				return true;
 			} else {
 				return false;
@@ -155,14 +160,15 @@ public class FileManager {
 						"&6Version: &e" + AIOCloud.versionhandler.getCurrentVersion()});
 				config.setAction(new String[]{"&6AIOCloud-Application",
 						"&6Version: &e" + AIOCloud.versionhandler.getCurrentVersion(),
-						"&6Discord: &ediscord.gg/3keBE3Y"});
+						"&6Discord: &ediscord.aiocloud.de"});
 				config.setMaintenanceAction(new String[]{"&6AIOCloud-Application",
 						"&6Version: &e" + AIOCloud.versionhandler.getCurrentVersion(),
-						"&6Discord: &ediscord.gg/3keBE3Y"});
+						"&6Discord: &ediscord.aiocloud.de"});
 				config.setPlayerSize("&7%onlinePlayers%/%maxPlayers%");
 				config.setMaintenancePlayerSize("&cMaintenance");
 				SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 				config.setCreatedAt(format.format(new Date()));
+				config.create();
 				return true;
 			} else {
 				return false;
@@ -187,7 +193,7 @@ public class FileManager {
 					String name = file.getName().replaceAll(".json", "");
 					JsonReader reader = new JsonReader(new FileReader(file));
 					JsonObject json = gson.fromJson(reader, JsonObject.class);
-					Dispatcher.availableworker.put(name, new WorkerObject(config.getHostname(), json.get("port").getAsInt(), name, json.get("authToken").getAsString()));
+					Dispatcher.availableworker.put(name, new WorkerObject(name, file));
 					Dispatcher.portmanager.addWorkerPort(json.get("port").getAsInt());
 					AIOCloud.logginghandler.print("Worker loaded [name: " + name + ", authToken: " + json.get("authToken").getAsString() + ", port: " + json.get("port").getAsInt() + "]", LoggingType.INFO);
 				}

@@ -76,7 +76,7 @@ public class FileManager {
             json.addProperty("hostAddress", host);
             json.addProperty("dispatcherAddress", dispatcherhost);
             json.addProperty("dispatcherPort", dispatcherport);
-            json.addProperty("workerId", workerid);
+            json.addProperty("authToken", workerid);
             json.addProperty("totalRam", totalram);
             writer.write(gson.toJson(json));
             writer.flush();

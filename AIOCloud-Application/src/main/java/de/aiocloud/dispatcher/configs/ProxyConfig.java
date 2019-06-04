@@ -10,9 +10,6 @@ import de.aiocloud.library.json.JsonArrayParser;
 import de.aiocloud.logger.LoggingType;
 
 import java.io.*;
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
 
 public class ProxyConfig {
 
