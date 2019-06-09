@@ -164,7 +164,16 @@ public class FileManager {
 				config.setMaintenanceAction(new String[]{"&6AIOCloud-Application",
 						"&6Version: &e" + AIOCloud.versionhandler.getCurrentVersion(),
 						"&6Discord: &ediscord.aiocloud.de"});
-				config.setPlayerSize("&7%onlinePlayers%/%maxPlayers%");
+				config.setHeader(new String[]{"&6AIOCloud-Application",
+						" ",
+						"&7You play on &8- &e%currentserver%",
+						"&7Player &8- &e%onlinePlayer%&7/&6%maxPlayer%",
+						" "});
+				config.setFooter(new String[]{" ",
+						"&eWebsite &8- &7AIOCloud.de",
+						"&eDiscord &8- &7discord.aiocloud.de",
+						" "});
+				config.setPlayerSize("&7%onlinePlayer%/%maxPlayer%");
 				config.setMaintenancePlayerSize("&cMaintenance");
 				SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 				config.setCreatedAt(format.format(new Date()));

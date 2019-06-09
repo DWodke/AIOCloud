@@ -111,6 +111,11 @@ public class ProxyObject {
             }
         }).start();
     }
+    private void sendInfos() {
+        JsonObject json = new JsonObject();
+        json.addProperty("maintenance", this.proxygroup.getConfig().getMaintenance());
+        json.addProperty("worker", this.proxygroup.getConfig().getWorker());
+    }
     /**
      * This methods are GET methods.
      */

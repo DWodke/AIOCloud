@@ -53,3 +53,9 @@ AIOCloud-Application/src/main/java/de/aiocloud/worker/objects/DispatcherObject.j
 AIOCloud-Application/.idea/artifacts/AIOCloud_Application_Dispatcher.xml
 AIOCloud-Application/.idea/artifacts/AIOCloud_Application_Worker.xml
 AIOCloud-Application/target/classes/META-INF/AIOCloud-Application.kotlin_module
+Proxy-Application/.idea/compiler.xml
+Proxy-Application/.idea/encodings.xml
+Proxy-Application/.idea/misc.xml
+Proxy-Application/.idea/vcs.xml
+Proxy-Application/.idea/workspace.xml
+Proxy-Application/Proxy-Application.iml

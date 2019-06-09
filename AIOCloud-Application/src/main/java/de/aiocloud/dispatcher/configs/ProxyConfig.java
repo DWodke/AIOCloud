@@ -26,6 +26,8 @@ public class ProxyConfig {
     private String[] maintenancemotd;
     private String[] action;
     private String[] maintenanceaction;
+    private String[] header;
+    private String[] footer;
     private String playersize;
     private String maintenanceplayersize;
     private String createdat;
@@ -72,6 +74,8 @@ public class ProxyConfig {
             JsonArray maintenancemotdarray = new JsonArray();
             JsonArray action = new JsonArray();
             JsonArray maintenanceaction = new JsonArray();
+            JsonArray headerarray = new JsonArray();
+            JsonArray footerarray = new JsonArray();
             for(String line : this.motd) {
                 motdarray.add(line);
             }
@@ -84,13 +88,18 @@ public class ProxyConfig {
             for(String line : this.maintenanceaction) {
                 maintenanceaction.add(line);
             }
+            for(String line : this.header) {
+                headerarray.add(line);
+            }
+            for(String line : this.footer) {
+                footerarray.add(line);
+            }
             json.add("motd", motdarray);
             json.add("action", action);
             json.add("maintenanceMotd", maintenancemotdarray);
             json.add("maintenanceAction", maintenanceaction);
-            /*action.add("&6AIOCloud - Application &7| &cThe simple, extensive and exclusive system.");
-            action.add("&6Programmed by: &cDominik Wodke");
-            action.add("&6Version: &c" + AIOCloud.versionhandler.getCurrentVersion());*/
+            json.add("tabHeader", headerarray);
+            json.add("tabFooter", footerarray);
             writer.write(gson.toJson(json));
             writer.flush();
             writer.close();
@@ -121,6 +130,8 @@ public class ProxyConfig {
             this.save_logs = json.get("save_logs").getAsBoolean();
             this.worker = json.get("worker").getAsString();
             this.startport = json.get("startPort").getAsInt();
+            this.header = new JsonArrayParser(json.get("tabHeader").getAsJsonArray()).getStringArray();
+            this.footer = new JsonArrayParser(json.get("tabFooter").getAsJsonArray()).getStringArray();
             return true;
         } catch (Exception e) {
             AIOCloud.logginghandler.print("ERROR while load file from group '" + this.name + "'.", LoggingType.ERROR);
@@ -179,6 +190,12 @@ public class ProxyConfig {
     public void setMaintenancePlayerSize(String maintenanceplayersize) {
         this.maintenanceplayersize = maintenanceplayersize;
     }
+    public void setFooter(String[] footer) {
+        this.footer = footer;
+    }
+    public void setHeader(String[] header) {
+        this.header = header;
+    }
     /**
      * This methods are get methods.
      * @return
@@ -230,5 +247,11 @@ public class ProxyConfig {
     }
     public String[] getMaintenanceMotd() {
         return maintenancemotd;
+    }
+    public String[] getFooter() {
+        return footer;
+    }
+    public String[] getHeader() {
+        return header;
     }
 }
