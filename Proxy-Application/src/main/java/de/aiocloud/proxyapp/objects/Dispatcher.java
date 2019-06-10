@@ -16,6 +16,7 @@ public class Dispatcher {
     private Integer port;
     private Socket socket;
     private JsonParser parser;
+    private Infos infos;
 
     /**
      * This methid is the initial method if the 'Dispatcher' object.
@@ -39,6 +40,9 @@ public class Dispatcher {
             TimeHandler.sleep(1000L);
         }
     }
+    /**
+     * This method reads the stream from the socket.
+     */
     public void readChannel() {
         new Thread(new Runnable() {
             @Override
@@ -52,6 +56,7 @@ public class Dispatcher {
                         String key = json.get("key").getAsString();
                         if(key != null) {
                             if(key.equalsIgnoreCase("proxyInformation")) {
+                                infos = new Infos(json);
                             }
                         }
                     }
@@ -63,5 +68,11 @@ public class Dispatcher {
                 }
             }
         }).start();
+    }
+    /**
+     * The following methods are GET methods.
+     */
+    public Infos getInfos() {
+        return infos;
     }
 }

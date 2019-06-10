@@ -6,7 +6,7 @@ import de.aiocloud.AIOCloud;
 import de.aiocloud.dispatcher.Dispatcher;
 import de.aiocloud.dispatcher.configs.WorkerConfig;
 import de.aiocloud.dispatcher.utils.FileManager;
-import de.aiocloud.library.connector.Packet;
+import de.aiocloud.library.connection.Packet;
 import de.aiocloud.library.security.SecurityManager;
 import de.aiocloud.library.time.TimeHandler;
 import de.aiocloud.logger.LoggingType;

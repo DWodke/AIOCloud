@@ -1,4 +1,4 @@
-package de.aiocloud.library.connector;
+package de.aiocloud.library.connection;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

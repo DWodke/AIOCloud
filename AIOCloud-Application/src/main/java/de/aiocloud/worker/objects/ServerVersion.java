@@ -1,10 +1,9 @@
 package de.aiocloud.worker.objects;
 
 import de.aiocloud.AIOCloud;
-import de.aiocloud.library.connector.Download;
+import de.aiocloud.library.connection.Download;
 import de.aiocloud.logger.LoggingType;
 
-import java.io.File;
 import java.util.HashMap;
 
 public class ServerVersion {

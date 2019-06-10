@@ -5,7 +5,7 @@ import de.aiocloud.AIOCloud;
 import de.aiocloud.dispatcher.Dispatcher;
 import de.aiocloud.dispatcher.configs.ProxyConfig;
 import de.aiocloud.dispatcher.utils.FileManager;
-import de.aiocloud.library.connector.Packet;
+import de.aiocloud.library.connection.Packet;
 import de.aiocloud.logger.LoggingType;
 
 import java.io.File;

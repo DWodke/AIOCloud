@@ -5,7 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import de.aiocloud.AIOCloud;
-import de.aiocloud.library.connector.Packet;
+import de.aiocloud.library.connection.Packet;
 import de.aiocloud.library.security.SecurityManager;
 import de.aiocloud.logger.LoggingType;
 import de.aiocloud.worker.utils.FileManager;

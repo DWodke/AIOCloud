@@ -14,7 +14,7 @@ public class VersionHandler {
         this.currentversion = "1.0-ALPHA";
     }
     /**
-     * GET method for @param(currentversion)
+     * GET method for @param(currentversion).
      */
     public String getCurrentVersion() {
         return currentversion;

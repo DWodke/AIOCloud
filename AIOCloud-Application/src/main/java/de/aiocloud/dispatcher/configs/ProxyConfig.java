@@ -18,6 +18,7 @@ public class ProxyConfig {
     private Integer startport;
     private Boolean save_logs;
     private Integer memory;
+    private Integer maxplayer;
     private Integer minonline;
     private Integer maxonline;
     private Boolean dynamic;
@@ -65,6 +66,7 @@ public class ProxyConfig {
             json.addProperty("memory", this.memory);
             json.addProperty("minOnline", this.minonline);
             json.addProperty("maxOnline", this.maxonline);
+            json.addProperty("maxPlayer", this.maxplayer);
             json.addProperty("dynamic", this.dynamic);
             json.addProperty("maintenance", this.maintenance);
             json.addProperty("playerSize", this.playersize);
@@ -117,6 +119,7 @@ public class ProxyConfig {
             this.name = json.get("name").getAsString();
             this.dynamic = json.get("dynamic").getAsBoolean();
             this.maintenance = json.get("maintenance").getAsBoolean();
+            this.maxplayer = json.get("maxPlayer").getAsInt();
             this.action = new JsonArrayParser(json.get("action").getAsJsonArray()).getStringArray();
             this.maintenanceaction = new JsonArrayParser(json.get("maintenanceAction").getAsJsonArray()).getStringArray();
             this.motd = new JsonArrayParser(json.get("motd").getAsJsonArray()).getStringArray();
@@ -196,6 +199,9 @@ public class ProxyConfig {
     public void setHeader(String[] header) {
         this.header = header;
     }
+    public void setMaxPlayer(Integer maxplayer) {
+        this.maxplayer = maxplayer;
+    }
     /**
      * This methods are get methods.
      * @return
@@ -253,5 +259,8 @@ public class ProxyConfig {
     }
     public String[] getHeader() {
         return header;
+    }
+    public Integer getMaxPlayer() {
+        return maxplayer;
     }
 }

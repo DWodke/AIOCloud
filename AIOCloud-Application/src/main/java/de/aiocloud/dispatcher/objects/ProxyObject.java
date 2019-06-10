@@ -1,9 +1,11 @@
 package de.aiocloud.dispatcher.objects;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import de.aiocloud.AIOCloud;
 import de.aiocloud.dispatcher.utils.FileManager;
+import de.aiocloud.library.connection.Packet;
 import de.aiocloud.library.time.TimeHandler;
 import de.aiocloud.logger.LoggingType;
 
@@ -68,6 +70,7 @@ public class ProxyObject {
                     while((socket = serversocket.accept()) != null) {
                         chatsocket = socket;
                         AIOCloud.logginghandler.print("Service connected [name: " + name + ", host: " + address + ", port: " + dispatcherport + ", type: Proxy]", LoggingType.INFO);
+                        sendInfos();
                         readChannel();
                         break;
                     }
@@ -111,10 +114,51 @@ public class ProxyObject {
             }
         }).start();
     }
+    /**
+     * This method send the info's from the config to the proxy.
+     */
     private void sendInfos() {
         JsonObject json = new JsonObject();
+        JsonArray actionarray = new JsonArray();
+        JsonArray maintenanceactionarray = new JsonArray();
+        JsonArray headerarray = new JsonArray();
+        JsonArray footerarray = new JsonArray();
+        JsonArray maintenancemotdarray = new JsonArray();
+        JsonArray motdarray = new JsonArray();
+        json.addProperty("key", "proxyInformation");
         json.addProperty("maintenance", this.proxygroup.getConfig().getMaintenance());
         json.addProperty("worker", this.proxygroup.getConfig().getWorker());
+        json.addProperty("maintenancePlayerSize", this.proxygroup.getConfig().getMaintenancePlayerSize());
+        json.addProperty("playerSize", this.proxygroup.getConfig().getPlayerSize());
+        json.addProperty("maxPlayer", this.proxygroup.getConfig().getMaxPlayer());
+        for(String line : this.proxygroup.getConfig().getAction()) {
+            actionarray.add(line);
+        }
+        for(String line : this.proxygroup.getConfig().getMaintenanceAction()) {
+            maintenanceactionarray.add(line);
+        }
+        for(String line : this.proxygroup.getConfig().getHeader()) {
+            headerarray.add(line);
+        }
+        for(String line : this.proxygroup.getConfig().getFooter()) {
+            footerarray.add(line);
+        }
+        for(String line : this.proxygroup.getConfig().getMaintenanceMotd()) {
+            maintenancemotdarray.add(line);
+        }
+        for(String line : this.proxygroup.getConfig().getMotd()) {
+            motdarray.add(line);
+        }
+        json.add("action", actionarray);
+        json.add("maintenanceAction", maintenanceactionarray);
+        json.add("header", headerarray);
+        json.add("footer", footerarray);
+        json.add("maintenanceMotd", maintenancemotdarray);
+        json.add("motd", motdarray);
+        json.addProperty("currentGroup", this.proxygroup.getName());
+        if(this.chatsocket != null) {
+            new Packet(json).send(this.chatsocket);
+        }
     }
     /**
      * This methods are GET methods.

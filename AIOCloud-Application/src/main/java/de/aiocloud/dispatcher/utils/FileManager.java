@@ -139,7 +139,7 @@ public class FileManager {
 	 * @param dynamic is the group dynamic?
 	 * @return
 	 */
-	public static Boolean createProxyGroup(String name, String worker, Integer memory, Integer online, Integer maxonline, Boolean dynamic) {
+	public static Boolean createProxyGroup(String name, String worker, Integer memory, Integer online, Integer maxonline, Boolean dynamic, Integer maxplayer) {
 		try {
 			File proxygroupfile = new File(proxygroupdir.getPath() + "/" + name + ".json");
 			if(!proxygroupfile.exists()) {
@@ -153,6 +153,7 @@ public class FileManager {
 				config.setMinOnline(online);
 				config.setMaxOnline(maxonline);
 				config.setDynamic(dynamic);
+				config.setMaxPlayer(maxplayer);
 				config.setMaintenance(true);
 				config.setMotd(new String[]{"&6AIOCloud-Application &7| &eSimple, extensive and exclusive.",
 						"&6Version: &e" + AIOCloud.versionhandler.getCurrentVersion()});

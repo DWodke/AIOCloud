@@ -1,4 +1,4 @@
-package de.aiocloud.library.connector;
+package de.aiocloud.library.connection;
 
 import java.io.File;
 import java.io.FileOutputStream;
