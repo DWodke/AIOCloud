@@ -1,5 +1,7 @@
 package de.aiocloud.proxyapp;
 
+import com.google.gson.JsonObject;
+import de.aiocloud.proxyapp.library.connection.Packet;
 import de.aiocloud.proxyapp.logger.LoggingHandler;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
@@ -16,6 +18,9 @@ public class Main extends Plugin {
     }
     @Override
     public void onDisable() {
+        JsonObject json = new JsonObject();
+        json.addProperty("key", );
+        new Packet()
     }
     /**
      * Init the app.

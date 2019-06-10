@@ -19,7 +19,6 @@ public class DispatcherObject {
     private Socket socket;
     private String host;
     private Integer port;
-
     private Integer tries;
     private Gson gson;
     private JsonParser parser;
@@ -109,5 +108,11 @@ public class DispatcherObject {
                 }
             }
         }).start();
+    }
+    /**
+     * The following methods are GET methods.
+     */
+    public Socket getSocket() {
+        return socket;
     }
 }

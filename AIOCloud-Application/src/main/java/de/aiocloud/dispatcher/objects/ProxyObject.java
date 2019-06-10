@@ -60,6 +60,12 @@ public class ProxyObject {
         }
     }
     /**
+     * This method delete this proxy-object.
+     */
+    public void delete() {
+        this.proxygroup.deleteProxy(this.id);
+    }
+    /**
      * This method connect to the proxy.
      */
     public void connect() {

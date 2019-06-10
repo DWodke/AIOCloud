@@ -76,7 +76,6 @@ public class WorkerObject {
                     AIOCloud.logginghandler.print("Trying again to open channel with port '" + config.getPort() + "'.", LoggingType.INFO);
                     TimeHandler.sleep(3000L);
                     connect();
-                    return;
                 }
             }
         }).start();
@@ -110,7 +109,7 @@ public class WorkerObject {
                                         connection = true;
                                         for(ProxyGroupObject group : Dispatcher.proxygroups.values()) {
                                             if(group.getWorker() == instance) {
-                                                group.doStartup();
+                                                group.startAllServicesUnderMinOnline();
                                             }
                                         }
                                     } else {
@@ -119,6 +118,16 @@ public class WorkerObject {
                                         chatsocket.close();
                                         connect();
                                         return;
+                                    }
+                                } else if(key.equalsIgnoreCase("serviceDeleted")) {
+                                    String processtype = json.get("processType").getAsString();
+                                    if(processtype.equalsIgnoreCase("proxy")) {
+                                        String processname = json.get("processName").getAsString();
+                                        ProxyGroupObject group = Dispatcher.proxygroups.get(processname.split(FileManager.config.getDefaultSeperator())[0]);
+                                        group.getAvailableProxy(processname).delete();
+                                        if(group.getAvailableProxies().size() < group.getConfig().getMinOnline()) {
+                                            group.startAllServicesUnderMinOnline();
+                                        }
                                     }
                                 }
                             }

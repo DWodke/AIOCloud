@@ -37,10 +37,12 @@ public class ProxyGroupObject {
     public ProxyObject getAvailableProxy(String name) {
         return this.availableproxies.get(name);
     }
+    /**
+     * This method starts a proxy service.
+     */
     public void startProxy(Integer id) {
         if(this.worker.hasWorkerEnoughMemory(this.config.getMemory())) {
             if(availableproxies.containsKey(this.name + FileManager.config.getDefaultSeperator() + id)) {
-                AIOCloud.logginghandler.print("The proxy with id '" + id + "' can't start, because an proxy with the same id is started!", LoggingType.WARNING);
                 return;
             }
             Integer connectionport = Dispatcher.portmanager.getNextFreeProxyConnectionPort();
@@ -64,9 +66,18 @@ public class ProxyGroupObject {
         }
     }
     /**
+     * This method deletes a proxy from the dispatcher.
+     * @param id from the proxy.
+     */
+    public void deleteProxy(Integer id) {
+        if(this.availableproxies.containsKey(this.name + FileManager.config.getDefaultSeperator() + id)) {
+            this.availableproxies.remove(this.name + FileManager.config.getDefaultSeperator() + id);
+        }
+    }
+    /**
      * This method do the setup of the group.
      */
-    public void doStartup() {
+    public void startAllServicesUnderMinOnline() {
         int i = 1;
         while(i <= this.config.getMinOnline()) {
             this.startProxy(i);
