@@ -17,6 +17,7 @@ public class Infos {
     private String[] header;
     private String[] footer;
     private String currentgroup;
+    private String name;
 
     /**
      * This is the initial method of the 'Infos' object.
@@ -35,6 +36,7 @@ public class Infos {
         this.header = new JsonArrayParser(json.get("header").getAsJsonArray()).getStringArray();
         this.footer = new JsonArrayParser(json.get("footer").getAsJsonArray()).getStringArray();
         this.currentgroup = json.get("currentGroup").getAsString();
+        this.name = json.get("name").getAsString();
     }
     /**
      * The following methods are GET methods.
@@ -74,5 +76,8 @@ public class Infos {
     }
     public String[] getMotd() {
         return motd;
+    }
+    public String getName() {
+        return name;
     }
 }

@@ -215,7 +215,7 @@ public class DispatcherSetup {
                         this.proxyversion = line;
                         this.taskid = this.taskid +1;
                         FileManager.createDispatcherConfig(this.hostaddress, this.minecraftversion, this.serverversion, this.proxyversion);
-                        FileManager.createProxyGroup(this.firstproxygroup, "Worker-1", this.firstproxygroupram, 1, -1, true);
+                        FileManager.createProxyGroup(this.firstproxygroup, "Worker-1", this.firstproxygroupram, 1, -1, true, 100);
                         AIOCloud.logginghandler.clear();
                         AIOCloud.logginghandler.print("Installation completed successfully.", LoggingType.INFO);
                         AIOCloud.logginghandler.print("In the 'config.json'-file you can change all data again.", LoggingType.INFO);

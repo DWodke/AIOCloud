@@ -1,15 +1,17 @@
 package de.aiocloud.worker.objects;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import de.aiocloud.AIOCloud;
 import de.aiocloud.library.connection.Packet;
+import de.aiocloud.library.time.TimeHandler;
 import de.aiocloud.logger.LoggingType;
 import de.aiocloud.worker.Worker;
 import de.aiocloud.worker.utils.FileManager;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintStream;
+import java.io.*;
+import java.net.URI;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -27,6 +29,7 @@ public class Proxy {
     private Boolean dynamic;
     private Boolean save_logs;
     private File dir;
+    private static Gson gson;
 
     /**
      * This is the initial method of the 'Proxy' object.
@@ -39,6 +42,7 @@ public class Proxy {
      */
     public Proxy(String name, Integer id, Integer port, Integer memory, String dispatcherhost, Integer dispatcherport, Boolean dynamic, Boolean save_logs) {
         Worker.proxymanager.addProxy(this);
+        this.gson = new GsonBuilder().setPrettyPrinting().create();
         this.name = name;
         this.id = id;
         this.port = port;
@@ -118,10 +122,42 @@ public class Proxy {
         }
         try {
             File jarfile = new File(FileManager.filesdir.getPath() + "/proxy.jar");
-            if(jarfile.exists()) {
-                jarfile.delete();
+            File dirjar = new File(dir.getPath() + "/proxy.jar");
+            if(dirjar.exists()) {
+                dirjar.delete();
             }
-            FileManager.copyFile(jarfile, dir);
+            FileManager.copyFile(jarfile, dirjar);
+            File plugindirectory = new File(dir.getPath() + "/plugins");
+            if(!plugindirectory.exists()) {
+                plugindirectory.mkdir();
+            }
+            File proxyapi = new File(FileManager.filesdir.getPath() + "/proxy-api.jar");
+            File currentproxyapi = new File(plugindirectory.getPath() + "/proxy-api.jar");
+            if(currentproxyapi.exists()) {
+                currentproxyapi.delete();
+            }
+            //URI uri = URI.create("jar:file:" + currentproxyapi.getAbsolutePath());
+            FileManager.copyFile(proxyapi, currentproxyapi);
+            File cloudplugindir = new File(dir.getPath() + "/plugins/Proxy-Application");
+            if(!cloudplugindir.exists()) {
+                cloudplugindir.mkdir();
+            }
+            File connectfile = new File(dir.getPath() + "/plugins/Proxy-Application/connectionFile.json");
+            if(connectfile.exists()) {
+                connectfile.delete();
+            }
+            connectfile.createNewFile();
+            JsonObject json = new JsonObject();
+            json.addProperty("host", this.dispatcherhost);
+            json.addProperty("port", this.dispatcherport);
+            try {
+                FileWriter writer = new FileWriter(connectfile);
+                writer.write(gson.toJson(json));
+                writer.flush();
+                writer.close();
+            } catch (IOException e) {
+                AIOCloud.logginghandler.print("ERROR while create proxy-connection-file.", LoggingType.ERROR);
+            }
         } catch (IOException e) {
             AIOCloud.logginghandler.print("ERROR while copy file: " + FileManager.filesdir.getPath() + "/proxy.jar", LoggingType.ERROR);
         }

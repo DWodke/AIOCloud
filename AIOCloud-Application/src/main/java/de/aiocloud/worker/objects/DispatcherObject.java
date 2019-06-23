@@ -7,6 +7,7 @@ import com.google.gson.JsonParser;
 import de.aiocloud.AIOCloud;
 import de.aiocloud.library.connection.Packet;
 import de.aiocloud.library.security.SecurityManager;
+import de.aiocloud.library.time.TimeHandler;
 import de.aiocloud.logger.LoggingType;
 import de.aiocloud.worker.utils.FileManager;
 
@@ -99,11 +100,9 @@ public class DispatcherObject {
                     }
                 } catch (Exception e) {
                     AIOCloud.logginghandler.print("Connection to dispatcher lost...", LoggingType.WARNING);
-                    AIOCloud.logginghandler.print("Wait 10 seconds befor stopping the worker!", LoggingType.INFO);
-                    try {
-                        Thread.sleep(1000);
-                    } catch (Exception e1) {
-                    }
+                    AIOCloud.logginghandler.print("Wait 10 seconds before stopping the worker!", LoggingType.INFO);
+                    e.printStackTrace();
+                    TimeHandler.sleep(1000L);
                     connect();
                 }
             }
@@ -114,5 +113,11 @@ public class DispatcherObject {
      */
     public Socket getSocket() {
         return socket;
+    }
+    public Integer getPort() {
+        return port;
+    }
+    public String getHost() {
+        return host;
     }
 }

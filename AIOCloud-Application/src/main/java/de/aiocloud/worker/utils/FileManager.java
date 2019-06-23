@@ -5,9 +5,18 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
+import com.sun.deploy.util.StringUtils;
 import de.aiocloud.worker.objects.Config;
 
 import java.io.*;
+import java.nio.channels.FileChannel;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.Enumeration;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
+import java.util.jar.JarOutputStream;
 
 public class FileManager {
 
@@ -124,19 +133,37 @@ public class FileManager {
      * @throws IOException
      */
     public static void copyFile(File source, File dest) throws IOException {
-        InputStream is = null;
-        OutputStream os = null;
+        FileChannel sourceChannel = null;
+        FileChannel destChannel = null;
         try {
-            is = new FileInputStream(source);
-            os = new FileOutputStream(dest);
-            byte[] buffer = new byte[1024];
-            int length;
-            while ((length = is.read(buffer)) > 0) {
-                os.write(buffer, 0, length);
-            }
-        } finally {
-            is.close();
-            os.close();
+            sourceChannel = new FileInputStream(source).getChannel();
+            destChannel = new FileOutputStream(dest).getChannel();
+            destChannel.transferFrom(sourceChannel, 0, sourceChannel.size());
+        }finally{
+            sourceChannel.close();
+            destChannel.close();
         }
+    }
+    public static void copyJarFile(JarFile jarFile, File destDir) throws IOException {
+        String fileName = jarFile.getName();
+        String fileNameLastPart = fileName.substring(fileName.lastIndexOf(File.separator));
+        File destFile = new File(destDir, fileNameLastPart);
+        JarOutputStream jos = new JarOutputStream(new FileOutputStream(destFile));
+        Enumeration<JarEntry> entries = jarFile.entries();
+        while (entries.hasMoreElements()) {
+            JarEntry entry = entries.nextElement();
+            InputStream is = jarFile.getInputStream(entry);
+            //jos.putNextEntry(entry);
+            // create a new entry to avoid ZipException: invalid entry compressed size
+            jos.putNextEntry(new JarEntry(entry.getName()));
+            byte[] buffer = new byte[4096];
+            int bytesRead = 0;
+            while ((bytesRead = is.read(buffer)) != -1) {
+                jos.write(buffer, 0, bytesRead);
+            }
+            is.close();
+            jos.closeEntry();
+        }
+        jos.close();
     }
 }

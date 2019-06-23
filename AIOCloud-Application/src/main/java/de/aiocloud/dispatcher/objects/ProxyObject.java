@@ -102,7 +102,7 @@ public class ProxyObject {
                             json = parser.parse(packet).getAsJsonObject();
                             String key = json.get("key").getAsString();
                             if(key != null) {
-                                if(key.equalsIgnoreCase("registration")) {
+                                if(key.equalsIgnoreCase("serviceDeleted")) {
                                 }
                             }
                         } else {
@@ -156,6 +156,7 @@ public class ProxyObject {
             motdarray.add(line);
         }
         json.add("action", actionarray);
+        json.addProperty("name", this.name);
         json.add("maintenanceAction", maintenanceactionarray);
         json.add("header", headerarray);
         json.add("footer", footerarray);

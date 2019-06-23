@@ -22,7 +22,7 @@ public class ServerVersion {
      * @param minecraftversion 1.7, 1.8....
      * @param proxyversion jar-version (Waterfall, Bungeecord....)
      */
-    public ServerVersion(String serverversion, String minecraftversion, String proxyversion) {
+    public ServerVersion(final String serverversion, final String minecraftversion, final String proxyversion) {
         this.serverversion = serverversion;
         this.minecraftversion = minecraftversion;
         this.proxyversion = proxyversion;
@@ -33,6 +33,8 @@ public class ServerVersion {
         } else if(this.proxyversion.equalsIgnoreCase("WATERFALL")) {
             this.proxyurl = "https://papermc.io/ci/job/Waterfall/lastSuccessfulBuild/artifact/Waterfall-Proxy/bootstrap/target/Waterfall.jar";
         }
+
+        // Set all spigot links.
         this.spigot_jars.put("1.7.10", "https://cdn.getbukkit.org/spigot/spigot-1.7.10-SNAPSHOT-b1657.jar");
         this.spigot_jars.put("1.8", "https://cdn.getbukkit.org/spigot/spigot-1.8-R0.1-SNAPSHOT-latest.jar");
         this.spigot_jars.put("1.8.3", "https://cdn.getbukkit.org/spigot/spigot-1.8.3-R0.1-SNAPSHOT-latest.jar");
@@ -56,20 +58,22 @@ public class ServerVersion {
         this.spigot_jars.put("1.13.1", "https://cdn.getbukkit.org/spigot/spigot-1.13.1.jar");
         this.spigot_jars.put("1.13.2", "https://cdn.getbukkit.org/spigot/spigot-1.13.2.jar");
 
+        // Set all paper-spigot links.
         this.paper_jars.put("1.7.10", "https://yivesmirror.com/files/paper/PaperSpigot-1.7.10-R0.1-SNAPSHOT-latest.jar");
         this.paper_jars.put("1.8.8", "https://yivesmirror.com/files/paper/PaperSpigot-1.8.8-R0.1-SNAPSHOT-latest.jar");
         this.paper_jars.put("1.11.2", "https://yivesmirror.com/files/paper/PaperSpigot-1.11.2-b1104.jar");
         this.paper_jars.put("1.12.2", "https://yivesmirror.com/files/paper/Paper-1.12.2-b1611.jar");
         this.paper_jars.put("1.13.2", "https://yivesmirror.com/files/paper/Paper-latest.jar");
         AIOCloud.logginghandler.print("Trying to download server.jar...", LoggingType.INFO);
-        if(this.serverversion.equalsIgnoreCase("SPIGOT")) {
-            new Download(this.spigot_jars.get(this.minecraftversion), "./worker/files/server.jar");
-        } else if(this.serverversion.equalsIgnoreCase("PAPER")) {
-            new Download(this.paper_jars.get(this.minecraftversion), "./worker/files/server.jar");
+        if(serverversion.equalsIgnoreCase("SPIGOT")) {
+            new Download(spigot_jars.get(minecraftversion), "./worker/files/server.jar");
+        } else if(serverversion.equalsIgnoreCase("PAPER")) {
+            new Download(paper_jars.get(minecraftversion), "./worker/files/server.jar");
         }
         AIOCloud.logginghandler.print("Download complete!", LoggingType.INFO);
         AIOCloud.logginghandler.print("Trying to download proxy.jar...", LoggingType.INFO);
-        new Download(this.proxyurl, "./worker/files/proxy.jar");
+        new Download(proxyurl, "./worker/files/proxy.jar");
         AIOCloud.logginghandler.print("Download complete!", LoggingType.INFO);
+        new DownloadManager();
     }
 }

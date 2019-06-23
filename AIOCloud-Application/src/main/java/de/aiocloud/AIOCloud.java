@@ -75,11 +75,9 @@ public class AIOCloud {
             if(componentnumber == 1) {
             	logginghandler.clear();
                 Dispatcher.startDispatcherComponent();
-                return;
             } else if(componentnumber == 2) {
             	logginghandler.clear();
             	Worker.startWorkerComponent();
-                return;
             } else {
             	logginghandler.print("Pls type a number between 1 and 2 in the console.", LoggingType.INFO);
                 quest();
@@ -112,7 +110,7 @@ public class AIOCloud {
 				for(int i = 0; i < 5; i++) {
 		            System.out.println(" ");
 		        }
-				logginghandler.print("Thank you for using the AIOCloud-Application! :)", LoggingType.INFO);
+				logginghandler.print("Thank's for using the AIOCloud-Application! :)", LoggingType.INFO);
 			}
 		}));
     }

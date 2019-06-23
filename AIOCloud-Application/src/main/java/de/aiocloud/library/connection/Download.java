@@ -27,6 +27,7 @@ public class Download {
             fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
             this.downloadedfile = new File(output);
         } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

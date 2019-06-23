@@ -34,6 +34,8 @@ public class Dispatcher {
     public void connect() {
         try {
             this.socket = new Socket(this.host, this.port);
+            Main.logginghandler.print("Connection to dispatcher successfully open.", LoggingType.ERROR);
+            this.readChannel();
         } catch (Exception e) {
             Main.logginghandler.print("Connection to the dispatcher does not work", LoggingType.ERROR);
             Main.logginghandler.print("Dispatcher: " + this.host + "/" + this.port, LoggingType.ERROR);
@@ -43,7 +45,7 @@ public class Dispatcher {
     /**
      * This method reads the stream from the socket.
      */
-    public void readChannel() {
+    private void readChannel() {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -74,5 +76,8 @@ public class Dispatcher {
      */
     public Infos getInfos() {
         return infos;
+    }
+    public Socket getSocket() {
+        return socket;
     }
 }

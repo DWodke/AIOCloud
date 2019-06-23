@@ -1,0 +1,4 @@
+name: Proxy-Application
+main: de.aiocloud.proxyapp.Main
+version: 0.1
+author: Dominik W.

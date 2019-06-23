@@ -2,10 +2,7 @@ package de.aiocloud.worker;
 
 import de.aiocloud.AIOCloud;
 import de.aiocloud.logger.LoggingType;
-import de.aiocloud.worker.objects.DispatcherObject;
-import de.aiocloud.worker.objects.ProxyManager;
-import de.aiocloud.worker.objects.Queue;
-import de.aiocloud.worker.objects.WorkerSetup;
+import de.aiocloud.worker.objects.*;
 import de.aiocloud.worker.utils.FileManager;
 
 public class Worker {
