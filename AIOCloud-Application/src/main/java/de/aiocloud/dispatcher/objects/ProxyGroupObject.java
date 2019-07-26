@@ -6,6 +6,7 @@ import de.aiocloud.dispatcher.Dispatcher;
 import de.aiocloud.dispatcher.configs.ProxyConfig;
 import de.aiocloud.dispatcher.utils.FileManager;
 import de.aiocloud.library.connection.Packet;
+import de.aiocloud.library.states.ProxyState;
 import de.aiocloud.logger.LoggingType;
 
 import java.io.File;
@@ -53,6 +54,7 @@ public class ProxyGroupObject {
             json.addProperty("key", "startProxy");
             json.addProperty("name", this.name + FileManager.config.getDefaultSeperator() + id);
             json.addProperty("id", id);
+            json.addProperty("group", this.name);
             json.addProperty("dispatcherHost", FileManager.config.getHostname());
             json.addProperty("dispatcherPort", connectionport);
             json.addProperty("port", port);
@@ -73,6 +75,19 @@ public class ProxyGroupObject {
         if(this.availableproxies.containsKey(this.name + FileManager.config.getDefaultSeperator() + id)) {
             this.availableproxies.remove(this.name + FileManager.config.getDefaultSeperator() + id);
         }
+    }
+    /**
+     * This method trigger a stop to the worker.
+     * @param id of the proxy.
+     */
+    public void triggerStop(Integer id) {
+        JsonObject json = new JsonObject();
+        json.addProperty("key", "triggerStop");
+        json.addProperty("serviceType", "proxy");
+        json.addProperty("serviceGroup", this.name);
+        json.addProperty("serviceId", id);
+        new Packet(json).send(this.worker.getChatSocket());
+        this.getAvailableProxy(this.name + FileManager.config.getDefaultSeperator() + id).setState(ProxyState.STOPPING);
     }
     /**
      * This method do the setup of the group.

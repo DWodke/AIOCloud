@@ -6,6 +6,7 @@ import com.google.gson.JsonParser;
 import de.aiocloud.AIOCloud;
 import de.aiocloud.dispatcher.utils.FileManager;
 import de.aiocloud.library.connection.Packet;
+import de.aiocloud.library.states.ProxyState;
 import de.aiocloud.library.time.TimeHandler;
 import de.aiocloud.logger.LoggingType;
 
@@ -24,6 +25,7 @@ public class ProxyObject {
     private Integer serverport;
     private ProxyGroupObject proxygroup;
     private ServerSocket serversocket;
+    private ProxyState state;
     private Socket chatsocket;
     private JsonParser parser;
 
@@ -32,6 +34,7 @@ public class ProxyObject {
      */
     public ProxyObject(String name, String address, Integer dispatcherport, Integer serverport, ProxyGroupObject proxygroup) {
         this.name = name;
+        this.state = ProxyState.STARTING;
         this.address = address;
         this.dispatcherport = dispatcherport;
         this.proxygroup = proxygroup;
@@ -75,6 +78,7 @@ public class ProxyObject {
                     Socket socket = null;
                     while((socket = serversocket.accept()) != null) {
                         chatsocket = socket;
+                        state = ProxyState.RUNNING;
                         AIOCloud.logginghandler.print("Service connected [name: " + name + ", host: " + address + ", port: " + dispatcherport + ", type: Proxy]", LoggingType.INFO);
                         sendInfos();
                         readChannel();
@@ -103,6 +107,7 @@ public class ProxyObject {
                             String key = json.get("key").getAsString();
                             if(key != null) {
                                 if(key.equalsIgnoreCase("serviceDeleted")) {
+                                    delete();
                                 }
                             }
                         } else {
@@ -134,26 +139,26 @@ public class ProxyObject {
         json.addProperty("key", "proxyInformation");
         json.addProperty("maintenance", this.proxygroup.getConfig().getMaintenance());
         json.addProperty("worker", this.proxygroup.getConfig().getWorker());
-        json.addProperty("maintenancePlayerSize", this.proxygroup.getConfig().getMaintenancePlayerSize());
-        json.addProperty("playerSize", this.proxygroup.getConfig().getPlayerSize());
+        json.addProperty("maintenancePlayerSize", this.proxygroup.getConfig().getMaintenancePlayerSize().replaceAll("&", "§"));
+        json.addProperty("playerSize", this.proxygroup.getConfig().getPlayerSize().replaceAll("&", "§"));
         json.addProperty("maxPlayer", this.proxygroup.getConfig().getMaxPlayer());
         for(String line : this.proxygroup.getConfig().getAction()) {
-            actionarray.add(line);
+            actionarray.add(line.replaceAll("&", "§"));
         }
         for(String line : this.proxygroup.getConfig().getMaintenanceAction()) {
-            maintenanceactionarray.add(line);
+            maintenanceactionarray.add(line.replaceAll("&", "§"));
         }
         for(String line : this.proxygroup.getConfig().getHeader()) {
-            headerarray.add(line);
+            headerarray.add(line.replaceAll("&", "§"));
         }
         for(String line : this.proxygroup.getConfig().getFooter()) {
-            footerarray.add(line);
+            footerarray.add(line.replaceAll("&", "§"));
         }
         for(String line : this.proxygroup.getConfig().getMaintenanceMotd()) {
-            maintenancemotdarray.add(line);
+            maintenancemotdarray.add(line.replaceAll("&", "§"));
         }
         for(String line : this.proxygroup.getConfig().getMotd()) {
-            motdarray.add(line);
+            motdarray.add(line.replaceAll("&", "§"));
         }
         json.add("action", actionarray);
         json.addProperty("name", this.name);
@@ -187,5 +192,11 @@ public class ProxyObject {
     }
     public Integer getId() {
         return id;
+    }
+    /**
+     * This methods are SET methods.
+     */
+    public void setState(ProxyState state) {
+        this.state = state;
     }
 }

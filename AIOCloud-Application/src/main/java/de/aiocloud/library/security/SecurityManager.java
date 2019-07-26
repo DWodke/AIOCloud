@@ -10,11 +10,7 @@ import java.security.spec.InvalidKeySpecException;
 public class SecurityManager {
 
     /**
-     * This method generates an strong hash.
-     * @param password
-     * @return
-     * @throws NoSuchAlgorithmException
-     * @throws InvalidKeySpecException
+     * This method generates an strong hash (512bit?).
      */
     public static String generateHash(String password) throws NoSuchAlgorithmException, InvalidKeySpecException {
         int iterations = 1000;

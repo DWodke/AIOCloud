@@ -27,12 +27,12 @@ public class Dispatcher {
 			FileManager.loadDispatcherConfig();
 		}
 		AIOCloud.printHeader();
-		for(int i = 0; i < 5; i++) {
-			System.out.println(" ");
-		}
-		AIOCloud.logginghandler.print("Told dispatcher to load all components...", LoggingType.INFO);
-		for(int i = 0; i < 2; i++) {
-			System.out.println(" ");
+		for(int i = 0; i < 7; i++) {
+			if(i < 5 || i > 5) {
+				System.out.println(" ");
+			} else {
+				AIOCloud.logginghandler.print("Told dispatcher to load all components...", LoggingType.INFO);
+			}
 		}
 		commandmanager = new CommandManager();
 		availableworker = new HashMap<String, WorkerObject>();
@@ -55,7 +55,6 @@ public class Dispatcher {
 						for(String key : commandmanager.getMap().keySet()) {
 							if(commandline.toLowerCase().startsWith(key.toLowerCase())) {
 								commandmanager.getMap().get(key).execute(commandline.split(" "));
-								continue;
 							}
 						}
 					} else {
@@ -64,6 +63,8 @@ public class Dispatcher {
 				}
 			}
 		} catch (Exception e) {
+			AIOCloud.logginghandler.print("The command feature has an ERROR.", LoggingType.ERROR);
+			AIOCloud.logginghandler.print("ERROR message: " + e.getMessage(), LoggingType.ERROR);
 		}
 	}
 	/**

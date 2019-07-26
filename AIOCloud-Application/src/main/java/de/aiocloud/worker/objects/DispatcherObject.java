@@ -9,6 +9,7 @@ import de.aiocloud.library.connection.Packet;
 import de.aiocloud.library.security.SecurityManager;
 import de.aiocloud.library.time.TimeHandler;
 import de.aiocloud.logger.LoggingType;
+import de.aiocloud.worker.Worker;
 import de.aiocloud.worker.utils.FileManager;
 
 import java.io.BufferedReader;
@@ -89,12 +90,20 @@ public class DispatcherObject {
                             } else if(key.equalsIgnoreCase("startProxy")) {
                                 new Proxy(json.get("name").getAsString()
                                         , json.get("id").getAsInt()
+                                        , json.get("group").getAsString()
                                         , json.get("port").getAsInt()
                                         , json.get("memory").getAsInt()
                                         , json.get("dispatcherHost").getAsString()
                                         , json.get("dispatcherPort").getAsInt()
                                         , json.get("dynamic").getAsBoolean()
                                         , json.get("save_logs").getAsBoolean()).start();
+                            } else if(key.equalsIgnoreCase("triggerStop")) {
+                                String servicetype = json.get("serviceType").getAsString();
+                                if(servicetype.equalsIgnoreCase("proxy")) {
+                                    String group = json.get("serviceGroup").getAsString();
+                                    Integer id = json.get("serviceId").getAsInt();
+                                    Worker.proxymanager.getProxy(id, group).delete();
+                                }
                             }
                         }
                     }

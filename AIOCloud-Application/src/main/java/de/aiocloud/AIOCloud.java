@@ -105,6 +105,7 @@ public class AIOCloud {
     	Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
 			
 			public void run() {
+			    // Stopp and delete all running services on the worker.
 				logginghandler.clear();
 				printHeader();
 				for(int i = 0; i < 5; i++) {

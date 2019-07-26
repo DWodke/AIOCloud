@@ -38,4 +38,17 @@ public class ProxyManager {
     public Proxy getProxy(String proxyname) {
         return this.availableproxies.get(proxyname);
     }
+    /**
+     * GET proxy from map with id.
+     * @param id is the id of the proxy.
+     * @return the proxy-object.
+     */
+    public Proxy getProxy(Integer id, String group) {
+        for(Proxy proxy : this.availableproxies.values()) {
+            if(id == proxy.getId() && group.equalsIgnoreCase(proxy.getGroup())) {
+                return proxy;
+            }
+        }
+        return null;
+    }
 }

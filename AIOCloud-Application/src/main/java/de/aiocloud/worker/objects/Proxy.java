@@ -20,6 +20,7 @@ public class Proxy {
 
     private String name;
     private Integer id;
+    private String group;
     private Integer port;
     private Integer memory;
     private String dispatcherhost;
@@ -40,11 +41,12 @@ public class Proxy {
      * @param dispatcherhost of the dispatcher.
      * @param dispatcherport of the dispatcher.
      */
-    public Proxy(String name, Integer id, Integer port, Integer memory, String dispatcherhost, Integer dispatcherport, Boolean dynamic, Boolean save_logs) {
+    public Proxy(String name, Integer id, String group, Integer port, Integer memory, String dispatcherhost, Integer dispatcherport, Boolean dynamic, Boolean save_logs) {
         Worker.proxymanager.addProxy(this);
         this.gson = new GsonBuilder().setPrettyPrinting().create();
         this.name = name;
         this.id = id;
+        this.group = group;
         this.port = port;
         this.memory = memory;
         this.dispatcherhost = dispatcherhost;
@@ -91,8 +93,6 @@ public class Proxy {
                         process = null;
                         JsonObject json = new JsonObject();
                         json.addProperty("key", "serviceDeleted");
-                        json.addProperty("processName", name);
-                        json.addProperty("processId", id);
                         json.addProperty("processType", "proxy");
                         new Packet(json).send(Worker.dispatcher.getSocket());
                         scheduler.shutdown();
@@ -105,7 +105,7 @@ public class Proxy {
     /**
      * This method do the startup for the new task.
      */
-    private void doSetup() {
+    public void doSetup() {
         if(this.dynamic) {
             if(this.dir.exists()) {
                 try {
@@ -170,6 +170,9 @@ public class Proxy {
     }
     public Integer getId() {
         return id;
+    }
+    public String getGroup() {
+        return group;
     }
     public Integer getMemory() {
         return memory;
