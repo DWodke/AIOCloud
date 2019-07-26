@@ -23,13 +23,13 @@ public class MotdListener implements Listener {
         p.setMax(Main.dispatcher.getInfos().getMaxPlayer());
         p.setOnline(0);
         if(Main.dispatcher.getInfos().getMaintenance()) {
-            ping.setVersion(new ServerPing.Protocol(Main.dispatcher.getInfos().getMaintenancePlayersize().replaceAll("%onlinePlayer%", 0 + "").replaceAll("%maxPlayer%", Main.dispatcher.getInfos().getMaxPlayer() + "").replaceAll("&", "§"), -1));
-            p.setSample(getMotdPlayerInfo(Arrays.asList(Main.dispatcher.getInfos().getMaintenanceAction())));
-            ping.setDescription(Main.dispatcher.getInfos().getMaintenanceMotd()[0].replaceAll("&", "§") + "\n" + Main.dispatcher.getInfos().getMaintenanceMotd()[1].replaceAll("&", "§"));
+            ping.setVersion(new ServerPing.Protocol(Main.dispatcher.getInfos().getMaintenancePlayersize().replaceAll("%onlinePlayer%", 0 + "").replaceAll("%maxPlayer%", Main.dispatcher.getInfos().getMaxPlayer() + ""), -1));
+            p.setSample(this.getMotdPlayerInfo(Arrays.asList(Main.dispatcher.getInfos().getMaintenanceAction())));
+            ping.setDescription(Main.dispatcher.getInfos().getMaintenanceMotd()[0] + "\n" + Main.dispatcher.getInfos().getMaintenanceMotd()[1]);
         } else {
-            ping.setVersion(new ServerPing.Protocol(Main.dispatcher.getInfos().getPlayerSize().replaceAll("%onlinePlayer%", 0 + "").replaceAll("%maxPlayer%", Main.dispatcher.getInfos().getMaxPlayer() + "").replaceAll("&", "§"), -1));
-            p.setSample(getMotdPlayerInfo(Arrays.asList(Main.dispatcher.getInfos().getAction())));
-            ping.setDescription(Main.dispatcher.getInfos().getMotd()[0].replaceAll("&", "§") + "\n" + Main.dispatcher.getInfos().getMotd()[1].replaceAll("&", "§"));
+            ping.setVersion(new ServerPing.Protocol(Main.dispatcher.getInfos().getPlayerSize().replaceAll("%onlinePlayer%", 0 + "").replaceAll("%maxPlayer%", Main.dispatcher.getInfos().getMaxPlayer() + ""), -1));
+            p.setSample(this.getMotdPlayerInfo(Arrays.asList(Main.dispatcher.getInfos().getAction())));
+            ping.setDescription(Main.dispatcher.getInfos().getMotd()[0] + "\n" + Main.dispatcher.getInfos().getMotd()[1]);
         }
         ping.setPlayers(p);
         e.setResponse(ping);
@@ -37,7 +37,7 @@ public class MotdListener implements Listener {
     /**
      * This method generates a ServerPing.PlayerInfo.
      */
-    public ServerPing.PlayerInfo[] getMotdPlayerInfo(List<String> vars) {
+    private ServerPing.PlayerInfo[] getMotdPlayerInfo(List<String> vars) {
         ServerPing.PlayerInfo[] playerInfos = new ServerPing.PlayerInfo[vars.size()];
         for (int i = 0; i < vars.size(); i++) {
             playerInfos[i] = new ServerPing.PlayerInfo(vars.get(i), UUID.randomUUID());
