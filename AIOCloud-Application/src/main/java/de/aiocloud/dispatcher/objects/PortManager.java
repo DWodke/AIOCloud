@@ -9,6 +9,7 @@ public class PortManager {
 
     private ArrayList<Integer> workerports;
     private ArrayList<Integer> proxyports;
+    private ArrayList<Integer> serverports;
     private ArrayList<Integer> proxyconnectionports;
 
     /**
@@ -17,6 +18,7 @@ public class PortManager {
     public PortManager() {
         this.workerports = new ArrayList<Integer>();
         this.proxyports = new ArrayList<Integer>();
+        this.serverports = new ArrayList<Integer>();
         this.proxyconnectionports = new ArrayList<Integer>();
     }
     /**
@@ -32,6 +34,13 @@ public class PortManager {
      */
     public void addProxyPort(Integer port) {
         this.proxyports.add(port);
+    }
+    /**
+     * This method add a port to the list.
+     * @param port is an server port.
+     */
+    public void addServerPort(Integer port) {
+        this.serverports.add(port);
     }
     /**
      * This method add a port to the list.
@@ -74,6 +83,19 @@ public class PortManager {
         Integer port = startport;
         while(true) {
             if(!this.proxyports.contains(port)) {
+                return port;
+            }
+            port = port++;
+        }
+    }
+    /**
+     * This method gives you an free server port.
+     * @return integer.
+     */
+    public Integer getNextFreeServerPort(Integer startport) {
+        Integer port = startport;
+        while(true) {
+            if(!this.serverports.contains(port)) {
                 return port;
             }
             port = port++;

@@ -14,6 +14,7 @@ public class Dispatcher {
 	public static PortManager portmanager;
 	public static HashMap<String, WorkerObject> availableworker;
 	public static HashMap<String, ProxyGroupObject> proxygroups;
+	public static HashMap<String, ServerGroupObject> servergroups;
 	
 	/**
 	 * This is the initial method of the dispatcher.
@@ -21,6 +22,7 @@ public class Dispatcher {
 	public static void startDispatcherComponent() {
 		portmanager = new PortManager();
 		proxygroups = new HashMap<String, ProxyGroupObject>();
+		servergroups = new HashMap<String, ServerGroupObject>();
 		if(FileManager.load()) {
 			new DispatcherSetup();
 		} else {

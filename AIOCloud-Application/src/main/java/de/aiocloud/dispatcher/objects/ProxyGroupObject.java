@@ -86,8 +86,8 @@ public class ProxyGroupObject {
         json.addProperty("serviceType", "proxy");
         json.addProperty("serviceGroup", this.name);
         json.addProperty("serviceId", id);
-        new Packet(json).send(this.worker.getChatSocket());
         this.getAvailableProxy(this.name + FileManager.config.getDefaultSeperator() + id).setState(ProxyState.STOPPING);
+        new Packet(json).send(this.worker.getChatSocket());
     }
     /**
      * This method do the setup of the group.
