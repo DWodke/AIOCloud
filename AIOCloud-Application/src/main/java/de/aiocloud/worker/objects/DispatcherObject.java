@@ -96,13 +96,26 @@ public class DispatcherObject {
                                         , json.get("dispatcherHost").getAsString()
                                         , json.get("dispatcherPort").getAsInt()
                                         , json.get("dynamic").getAsBoolean()
-                                        , json.get("save_logs").getAsBoolean()).start();
+                                        , json.get("save_logs").getAsBoolean()).startProcess();
                             } else if(key.equalsIgnoreCase("triggerStop")) {
                                 String servicetype = json.get("serviceType").getAsString();
                                 if(servicetype.equalsIgnoreCase("proxy")) {
                                     String group = json.get("serviceGroup").getAsString();
                                     Integer id = json.get("serviceId").getAsInt();
-                                    Worker.proxymanager.getProxy(id, group).delete();
+                                    Worker.proxymanager.getProxy(id, group).stopProcess();
+                                }
+                            } else if(key.equalsIgnoreCase("successfullyStarted")) {
+                                String serviceType = json.get("serviceType").getAsString();
+                                String serviceName = json.get("serviceName").getAsString();
+                                if(Worker.queue.getCurrentStartedService().equals(serviceName)) {
+                                    if(Worker.queue.getQueue().isEmpty()) {
+                                        Worker.queue.setCurrentStartedService(null);
+                                        Worker.queue.setCanStartService(true);
+                                    } else {
+                                        Worker.queue.setCanStartService(false);
+                                        Worker.queue.getQueue().get(0).startProcess();
+                                        Worker.queue.getQueue().remove(Worker.queue.getQueue().get(0));
+                                    }
                                 }
                             }
                         }

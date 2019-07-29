@@ -4,23 +4,24 @@ import java.util.ArrayList;
 
 public class Queue {
 
-    private ArrayList<Proxy> proxyqueue;
+    private ArrayList<CloudProcess> queue;
     private Boolean canstartservice;
+    private String currentstartedservice;
 
     /**
      * This is the initial method of the 'Queue' object.
      */
     public Queue() {
-        this.proxyqueue = new ArrayList<Proxy>();
+        this.queue = new ArrayList<CloudProcess>();
         this.canstartservice = true;
     }
     /**
      * Add a proxy to queue.
-     * @param proxy
+     * @param CloudProcess
      */
-    public void addToProxyQueue(Proxy proxy) {
-        if(this.proxyqueue.contains(proxy)) {
-            this.proxyqueue.add(proxy);
+    public void addToQueue(CloudProcess process) {
+        if(!this.queue.contains(process)) {
+            this.queue.add(process);
         }
     }
     /**
@@ -29,7 +30,16 @@ public class Queue {
     public Boolean getCanStartService() {
         return canstartservice;
     }
+    public String getCurrentStartedService() {
+        return currentstartedservice;
+    }
     public void setCanStartService(Boolean canstartservice) {
         this.canstartservice = canstartservice;
+    }
+    public void setCurrentStartedService(String currentstartedservice) {
+        this.currentstartedservice = currentstartedservice;
+    }
+    public ArrayList<CloudProcess> getQueue() {
+        return queue;
     }
 }

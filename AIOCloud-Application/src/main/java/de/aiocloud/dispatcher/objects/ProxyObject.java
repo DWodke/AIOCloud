@@ -81,6 +81,11 @@ public class ProxyObject {
                         state = ProxyState.RUNNING;
                         AIOCloud.logginghandler.print("Service connected [name: " + name + ", host: " + address + ", port: " + dispatcherport + ", type: Proxy]", LoggingType.INFO);
                         sendInfos();
+                        JsonObject json = new JsonObject();
+                        json.addProperty("key", "successfullyStarted");
+                        json.addProperty("serviceType", "proxy");
+                        json.addProperty("serviceName", name);
+                        new Packet(json).send(proxygroup.getWorker().getChatSocket());
                         readChannel();
                         break;
                     }

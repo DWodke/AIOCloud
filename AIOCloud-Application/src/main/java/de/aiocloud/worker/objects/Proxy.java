@@ -16,7 +16,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-public class Proxy {
+public class Proxy implements CloudProcess {
 
     private String name;
     private Integer id;
@@ -57,11 +57,12 @@ public class Proxy {
         this.dir = new File(FileManager.tempdir.getPath() + "/" + this.name);
     }
     /**
-     * This method start the proxy-server.
+     * This method start the proxy.
      */
-    public void start() {
+    public void startProcess() {
         if(Worker.queue.getCanStartService()) {
             Worker.queue.setCanStartService(false);
+            Worker.queue.setCurrentStartedService(name);
             this.startup = true;
             this.doSetup();
             ProcessBuilder pb = new ProcessBuilder();
@@ -74,33 +75,33 @@ public class Proxy {
                 this.startup = false;
             }
         } else {
-            Worker.queue.addToProxyQueue(this);
+            Worker.queue.addToQueue(this);
         }
     }
     /**
-     * This method delete the proxy-server.
+     * This method stop the proxy.
      */
-    public void delete() {
+    public void stopProcess() {
         Worker.proxymanager.removeProxy(this.name);
-            try {
-                PrintStream writer = new PrintStream(this.process.getOutputStream());
-                writer.println("end");
-                writer.flush();
-                final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-                scheduler.scheduleAtFixedRate(new Runnable() {
-                    public void run() {
-                        process.destroy();
-                        process = null;
-                        JsonObject json = new JsonObject();
-                        json.addProperty("key", "serviceDeleted");
-                        json.addProperty("processType", "proxy");
-                        new Packet(json).send(Worker.dispatcher.getSocket());
-                        scheduler.shutdown();
-                    }
-                }, 1, 1, TimeUnit.SECONDS);
-            } catch (Exception e) {
-                AIOCloud.logginghandler.print("ERROR while delete the proxy-process: " + this.dir.getPath(), LoggingType.ERROR);
-            }
+        try {
+            PrintStream writer = new PrintStream(this.process.getOutputStream());
+            writer.println("end");
+            writer.flush();
+            final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+            scheduler.scheduleAtFixedRate(new Runnable() {
+                public void run() {
+                    process.destroy();
+                    process = null;
+                    JsonObject json = new JsonObject();
+                    json.addProperty("key", "serviceDeleted");
+                    json.addProperty("processType", "proxy");
+                    new Packet(json).send(Worker.dispatcher.getSocket());
+                    scheduler.shutdown();
+                }
+            }, 1, 1, TimeUnit.SECONDS);
+        } catch (Exception e) {
+            AIOCloud.logginghandler.print("ERROR while delete the proxy-process: " + this.dir.getPath(), LoggingType.ERROR);
+        }
     }
     /**
      * This method do the startup for the new task.
